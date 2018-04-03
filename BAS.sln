@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModelLibrary", "DataModelLibrary\DataModelLibrary.csproj", "{260F0350-2240-4313-923F-1D8C0180A107}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelLibrary", "DataModelLibrary\DataModelLibrary.csproj", "{260F0350-2240-4313-923F-1D8C0180A107}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{227D7B19-D129-4D14-8B07-B8537F891D83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestService", "TestService\TestService.csproj", "{AFCC3376-5581-46BF-BFD8-BAFA2AF4D0CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{260F0350-2240-4313-923F-1D8C0180A107}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{260F0350-2240-4313-923F-1D8C0180A107}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{260F0350-2240-4313-923F-1D8C0180A107}.Release|Any CPU.Build.0 = Release|Any CPU
-		{227D7B19-D129-4D14-8B07-B8537F891D83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{227D7B19-D129-4D14-8B07-B8537F891D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{227D7B19-D129-4D14-8B07-B8537F891D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{227D7B19-D129-4D14-8B07-B8537F891D83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFCC3376-5581-46BF-BFD8-BAFA2AF4D0CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFCC3376-5581-46BF-BFD8-BAFA2AF4D0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFCC3376-5581-46BF-BFD8-BAFA2AF4D0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFCC3376-5581-46BF-BFD8-BAFA2AF4D0CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
