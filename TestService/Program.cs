@@ -10,6 +10,7 @@ namespace TestService
     {
         static void Main(string[] args)
         {
+            ServiceBAS.BASServiceModelClient client = new ServiceBAS.BASServiceModelClient("BasicHttpBinding_BAS.ServiceModel");
         }
     }
 }

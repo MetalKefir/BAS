@@ -6,6 +6,13 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelLibrary", "DataModelLibrary\DataModelLibrary.csproj", "{260F0350-2240-4313-923F-1D8C0180A107}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestService", "TestService\TestService.csproj", "{AFCC3376-5581-46BF-BFD8-BAFA2AF4D0CE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6EF200DA-C8F0-4906-B090-B96B965D21DE} = {6EF200DA-C8F0-4906-B090-B96B965D21DE}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceContractLibrary", "ServiceContractLibrary\ServiceContractLibrary.csproj", "{A710494A-69FC-48B4-9F0C-0B2B05B80C41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesBAS", "ServicesBAS\ServicesBAS.csproj", "{6EF200DA-C8F0-4906-B090-B96B965D21DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +28,14 @@ Global
 		{AFCC3376-5581-46BF-BFD8-BAFA2AF4D0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFCC3376-5581-46BF-BFD8-BAFA2AF4D0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFCC3376-5581-46BF-BFD8-BAFA2AF4D0CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A710494A-69FC-48B4-9F0C-0B2B05B80C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A710494A-69FC-48B4-9F0C-0B2B05B80C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A710494A-69FC-48B4-9F0C-0B2B05B80C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A710494A-69FC-48B4-9F0C-0B2B05B80C41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EF200DA-C8F0-4906-B090-B96B965D21DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EF200DA-C8F0-4906-B090-B96B965D21DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EF200DA-C8F0-4906-B090-B96B965D21DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EF200DA-C8F0-4906-B090-B96B965D21DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
