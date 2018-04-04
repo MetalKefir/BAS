@@ -10,7 +10,7 @@ namespace BAS
 {
     namespace ServiceContractLibrary
     {
-        [ServiceContract(Name = "BAS.ServiceModel")]
+        [ServiceContract(Namespace = "BAS.ServiceModel", Name = "ProductsService")]
         public interface IProducts
         {
             [OperationContract(Name = "Delete")]

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestService.ServicesBAS;
 
 namespace TestService
 {
@@ -10,7 +11,7 @@ namespace TestService
     {
         static void Main(string[] args)
         {
-            ServiceBAS.BASServiceModelClient client = new ServiceBAS.BASServiceModelClient("BasicHttpBinding_BAS.ServiceModel");
+            ProductsServiceClient client = new ProductsServiceClient();
         }
     }
 }
