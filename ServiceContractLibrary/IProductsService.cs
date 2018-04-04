@@ -11,7 +11,7 @@ namespace BAS
     namespace ServiceContractLibrary
     {
         [ServiceContract(Namespace = "BAS.ServiceModel", Name = "ProductsService")]
-        public interface IProducts
+        public interface IProductsService
         {
             [OperationContract(Name = "Delete")]
             IEnumerable<Product> Delete(IEnumerable<Product> products);
