@@ -10,6 +10,7 @@ namespace BAS
         [DataContract]
         public class Order
         {
+            [DataMember] public int Id { get; set; }
             [DataMember] public Customer OrderCustomer { get; set; }
             [DataMember] public DeliveriService DeliveriService { get; set; }
             [DataMember] public DateTime DateOrder { get; set; }
@@ -18,9 +19,10 @@ namespace BAS
             [DataMember] public long TotalSum { get; set; }
             [DataMember] public string Comment { get; set; }
 
-            public Order(Customer orderCustomer, DeliveriService deliveriService, DateTime dateOrder,
+            public Order(int id, Customer orderCustomer, DeliveriService deliveriService, DateTime dateOrder,
                 List<OrderedProduct> orderList, List<OrderStatus> orderStatuses, long totalSum, string comment)
             {
+                Id = id;
                 OrderCustomer = orderCustomer ?? throw new ArgumentNullException(nameof(orderCustomer));
                 DeliveriService = deliveriService ?? throw new ArgumentNullException(nameof(deliveriService));
                 DateOrder = dateOrder;

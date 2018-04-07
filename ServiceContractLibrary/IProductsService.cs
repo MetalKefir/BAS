@@ -11,23 +11,8 @@ namespace BAS
     namespace ServiceContractLibrary
     {
         [ServiceContract(Namespace = "BAS.ServiceModel", Name = "ProductsService")]
-        public interface IProductsService
+        public interface IProductsService : IBaseService<Product>
         {
-            [OperationContract(Name = "Delete")]
-            IEnumerable<Product> Delete(IEnumerable<Product> products);
-
-            [OperationContract(Name = "Create")]
-            IEnumerable<Product> Create(IEnumerable<Product> products);
-
-            [OperationContract(Name = "Update")]
-            IEnumerable<Product> Update(IEnumerable<Product> products);
-
-            [OperationContract(Name = "GetAll")]
-            IEnumerable<Product> GetAll();
-
-            [OperationContract(Name = "GetByID")]
-            Product GetByID(int ID);
-
             [OperationContract(Name = "GetByType")]
             IEnumerable<Product> GetByType(IEnumerable<string> types);
 

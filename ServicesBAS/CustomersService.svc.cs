@@ -14,7 +14,32 @@ namespace BAS
         // ПРИМЕЧАНИЕ. Чтобы запустить клиент проверки WCF для тестирования службы, выберите элементы CustomersService.svc или CustomersService.svc.cs в обозревателе решений и начните отладку.
         public class CustomersService : ICustomersService
         {
-            public IEnumerable<Customer> GetCustomers(int? ID = null)
+            public (bool IsSuccessful, string messeage) Create(IEnumerable<Customer> parametrs)
+            {
+                throw new NotImplementedException();
+            }
+
+            public (bool IsSuccessful, string messeage) Delete(IEnumerable<Customer> parametrs)
+            {
+                throw new NotImplementedException();
+            }
+
+            public IEnumerable<Customer> GetAll()
+            {
+                throw new NotImplementedException();
+            }
+
+            public Customer GetByID(int ID)
+            {
+                throw new NotImplementedException();
+            }
+
+            public (bool IsSuccessful, string messeage) Update(IEnumerable<Customer> parametrs)
+            {
+                throw new NotImplementedException();
+            }
+
+            public (bool IsSuccessful, string messeage) UpdateAdress(int customerId, Address address)
             {
                 throw new NotImplementedException();
             }

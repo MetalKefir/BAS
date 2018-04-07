@@ -16,12 +16,12 @@ namespace BAS
         // ПРИМЕЧАНИЕ. Чтобы запустить клиент проверки WCF для тестирования службы, выберите элементы Service1.svc или Service1.svc.cs в обозревателе решений и начните отладку.
         public class ProductsService : IProductsService
         {
-            public IEnumerable<Product> Create(IEnumerable<Product> products)
+            public (bool IsSuccessful, string messeage) Create(IEnumerable<Product> parametrs)
             {
                 throw new NotImplementedException();
             }
 
-            public IEnumerable<Product> Delete(IEnumerable<Product> products)
+            public (bool IsSuccessful, string messeage) Delete(IEnumerable<Product> parametrs)
             {
                 throw new NotImplementedException();
             }
@@ -61,7 +61,7 @@ namespace BAS
                 throw new NotImplementedException();
             }
 
-            public IEnumerable<Product> Update(IEnumerable<Product> products)
+            public (bool IsSuccessful, string messeage) Update(IEnumerable<Product> parametrs)
             {
                 throw new NotImplementedException();
             }

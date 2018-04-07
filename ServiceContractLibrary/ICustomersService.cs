@@ -11,10 +11,10 @@ namespace BAS
     namespace ServiceContractLibrary
     {
         [ServiceContract(Namespace = "BAS.ServiceModel", Name = "CustomersService")]
-        public interface ICustomersService
+        public interface ICustomersService : IBaseService<Customer>
         {
-            [OperationContract(Name = "GetCustomerById")]
-            IEnumerable<Customer> GetCustomers(int? ID = null);
+            [OperationContract(Name = "UpdateAdress")]
+            (bool IsSuccessful, string messeage) UpdateAdress(int customerId, Address address);
         }
     }
 }
