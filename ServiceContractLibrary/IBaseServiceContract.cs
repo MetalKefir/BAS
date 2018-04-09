@@ -6,7 +6,7 @@ namespace BAS
     namespace ServiceContractLibrary
     {
         [ServiceContract(Namespace = "BAS.ServiceModel", Name = "BaseService")]
-        public interface IBaseService<T>
+        public interface IBaseServiceContract<T>
         {
             [OperationContract(Name = "Create")]
             (bool IsSuccessful, string messeage) Create(IEnumerable<T> parametrs);
@@ -21,7 +21,7 @@ namespace BAS
             IEnumerable<T> GetAll();
 
             [OperationContract(Name = "GetByID")]
-            T GetByID(int ID);
+            T GetById(int Id);
         }
     }
 }

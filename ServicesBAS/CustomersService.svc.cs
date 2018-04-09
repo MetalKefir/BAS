@@ -12,7 +12,7 @@ namespace BAS
     {
         // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени класса "CustomersService" в коде, SVC-файле и файле конфигурации.
         // ПРИМЕЧАНИЕ. Чтобы запустить клиент проверки WCF для тестирования службы, выберите элементы CustomersService.svc или CustomersService.svc.cs в обозревателе решений и начните отладку.
-        public class CustomersService : ICustomersService
+        public class CustomersService : ICustomersServiceContract
         {
             public (bool IsSuccessful, string messeage) Create(IEnumerable<Customer> parametrs)
             {
@@ -29,7 +29,7 @@ namespace BAS
                 throw new NotImplementedException();
             }
 
-            public Customer GetByID(int ID)
+            public Customer GetById(int Id)
             {
                 throw new NotImplementedException();
             }
@@ -39,7 +39,7 @@ namespace BAS
                 throw new NotImplementedException();
             }
 
-            public (bool IsSuccessful, string messeage) UpdateAdress(int customerId, Address address)
+            public (bool IsSuccessful, string messeage) UpdateAddress(int customerId, Address address)
             {
                 throw new NotImplementedException();
             }

@@ -14,7 +14,7 @@ namespace BAS
     {
         // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени класса "Service1" в коде, SVC-файле и файле конфигурации.
         // ПРИМЕЧАНИЕ. Чтобы запустить клиент проверки WCF для тестирования службы, выберите элементы Service1.svc или Service1.svc.cs в обозревателе решений и начните отладку.
-        public class ProductsService : IProductsService
+        public class ProductsService : IProductsServiceContract
         {
             public (bool IsSuccessful, string messeage) Create(IEnumerable<Product> parametrs)
             {
@@ -36,7 +36,7 @@ namespace BAS
                 throw new NotImplementedException();
             }
 
-            public Product GetByID(int ID)
+            public Product GetById(int Id)
             {
                 throw new NotImplementedException();
             }

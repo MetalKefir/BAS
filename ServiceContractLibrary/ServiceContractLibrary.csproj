@@ -41,10 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IBaseService.cs" />
-    <Compile Include="ICustomersService.cs" />
-    <Compile Include="IOrdersService.cs" />
-    <Compile Include="IProductsService.cs" />
+    <Compile Include="IBaseServiceContract.cs" />
+    <Compile Include="ICustomersServiceContract.cs" />
+    <Compile Include="IOrdersServiceContract.cs" />
+    <Compile Include="IProductsServiceContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +52,9 @@
       <Project>{260f0350-2240-4313-923f-1d8c0180a107}</Project>
       <Name>DataModelLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

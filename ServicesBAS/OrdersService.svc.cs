@@ -13,7 +13,7 @@ namespace BAS
     {
         // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени класса "OrdersService" в коде, SVC-файле и файле конфигурации.
         // ПРИМЕЧАНИЕ. Чтобы запустить клиент проверки WCF для тестирования службы, выберите элементы OrdersService.svc или OrdersService.svc.cs в обозревателе решений и начните отладку.
-        public class OrdersService : IOrdersService
+        public class OrdersService : IOrdersServiceContract
         {
             public (bool IsSuccessful, string messeage) Create(IEnumerable<Order> parametrs)
             {
@@ -35,7 +35,7 @@ namespace BAS
                 throw new NotImplementedException();
             }
 
-            public Order GetByID(int ID)
+            public Order GetById(int Id)
             {
                 throw new NotImplementedException();
             }
@@ -45,7 +45,7 @@ namespace BAS
                 throw new NotImplementedException();
             }
 
-            public IEnumerable<Order> GetByStatus(Status products)
+            public IEnumerable<Order> GetByStatus(Status status)
             {
                 throw new NotImplementedException();
             }
