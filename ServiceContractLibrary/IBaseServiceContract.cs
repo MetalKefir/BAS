@@ -5,23 +5,26 @@ namespace BAS
 {
     namespace ServiceContractLibrary
     {
-        [ServiceContract(Namespace = "BAS.ServiceModel", Name = "BaseService")]
+
+        [ServiceContract(Namespace = "BAS.ServiceModel", Name = "BaseService")] 
         public interface IBaseServiceContract<T>
         {
             [OperationContract(Name = "Create")]
-            (bool IsSuccessful, string messeage) Create(IEnumerable<T> parametrs);
+            [ServiceKnownType(typeof(IReadOnlyCollection<DataModelLibrary.Customer>))]
+            (bool IsSuccessful, string messeage) Create(ICollection<T> parametr);
 
             [OperationContract(Name = "Update")]
-            (bool IsSuccessful, string messeage) Update(IEnumerable<T> parametrs);
+            (bool IsSuccessful, string messeage) Update(IReadOnlyCollection<T> parametr);
 
             [OperationContract(Name = "Delete")]
-            (bool IsSuccessful, string messeage) Delete(IEnumerable<T> parametrs);
+            (bool IsSuccessful, string messeage) Delete(IReadOnlyCollection<T> parametr);
 
             [OperationContract(Name = "GetAll")]
-            IEnumerable<T> GetAll();
+            ICollection<T> GetAll();
 
-            [OperationContract(Name = "GetByID")]
-            T GetById(int Id);
+            [OperationContract(Name = "GetBy")]
+            ICollection<T> GetBy(string fieldName, object parametr);
         }
+
     }
 }

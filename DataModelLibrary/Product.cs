@@ -10,7 +10,7 @@ namespace BAS
         [DataContract]
         public class Product
         {
-            [DataMember] public int Articulus { get; set; }
+            [DataMember] public int Articulus { get; private set; }
             [DataMember] public string Name { get; set; }
             [DataMember] public string Manufacturer { get; set; }
             [DataMember] public string Type { get; set; }

@@ -11,6 +11,7 @@
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -44,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connected Services\ServicesBAS\Reference.cs">
+    <Compile Include="Connected Services\ServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -56,44 +58,48 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ServicesBAS\ProductsService.wsdl" />
-    <None Include="Connected Services\ServicesBAS\ProductsService.xsd">
+    <None Include="Connected Services\ServiceReference\CustomersService.wsdl" />
+    <None Include="Connected Services\ServiceReference\CustomersService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ServicesBAS\ProductsService1.wsdl" />
-    <None Include="Connected Services\ServicesBAS\ProductsService1.xsd">
+    <None Include="Connected Services\ServiceReference\CustomersService1.wsdl" />
+    <None Include="Connected Services\ServiceReference\CustomersService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ServicesBAS\ProductsService2.xsd">
+    <None Include="Connected Services\ServiceReference\CustomersService2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ServicesBAS\ProductsService3.xsd">
+    <None Include="Connected Services\ServiceReference\CustomersService3.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\ServicesBAS\TestService.ServicesBAS.Product.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
+    <None Include="Properties\DataSources\BAS.DataModelLibrary.Customer.datasource" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\ServicesBAS\" />
+    <WCFMetadataStorage Include="Connected Services\ServiceReference\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\ServicesBAS\ProductsService.disco" />
+    <None Include="Connected Services\ServiceReference\CustomersService.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\ServicesBAS\configuration91.svcinfo" />
+    <None Include="Connected Services\ServiceReference\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\ServicesBAS\configuration.svcinfo" />
+    <None Include="Connected Services\ServiceReference\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\ServicesBAS\Reference.svcmap">
+    <None Include="Connected Services\ServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataModelLibrary\DataModelLibrary.csproj">
+      <Project>{260f0350-2240-4313-923f-1d8c0180a107}</Project>
+      <Name>DataModelLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

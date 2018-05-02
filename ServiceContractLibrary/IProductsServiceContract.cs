@@ -10,23 +10,15 @@ namespace BAS
 {
     namespace ServiceContractLibrary
     {
+
         [ServiceContract(Namespace = "BAS.ServiceModel", Name = "ProductsService")]
         public interface IProductsServiceContract : IBaseServiceContract<Product>
         {
-            [OperationContract(Name = "GetByType")]
-            IEnumerable<Product> GetByType(IEnumerable<string> types);
-
-            [OperationContract(Name = "GetByColor")]
-            IEnumerable<Product> GetByColor(IEnumerable<string> colors);
-
-            [OperationContract(Name = "GetByManufacturer")]
-            IEnumerable<Product> GetByManufacturer(IEnumerable<string> manufacturers);
 
             [OperationContract(Name = "GetByPrice")]
-            IEnumerable<Product> GetByPrice(int minprice, int? maxprice = null);
+            ICollection<Product> GetByPrice(int minprice, int? maxprice = null);
 
-            [OperationContract(Name = "GetByName")]
-            IEnumerable<Product> GetByName(string name);
         }
+
     }
 }

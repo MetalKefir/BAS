@@ -9,17 +9,9 @@ namespace BAS
 {
     namespace ServiceContractLibrary
     {
+
         [ServiceContract(Namespace = "BAS.ServiceModel", Name = "OrdersService")]
-        public interface IOrdersServiceContract : IBaseServiceContract<Order>
-        {
-            [OperationContract(Name = "GetByCustomer")]
-            IEnumerable<Order> GetByCustomer(int customerId);
+        public interface IOrdersServiceContract : IBaseServiceContract<Order> { }
 
-            [OperationContract(Name = "GetByProduct")]
-            IEnumerable<Order> GetByProduct(IEnumerable<Product> products);
-
-            [OperationContract(Name = "GetByStatus")]
-            IEnumerable<Order> GetByStatus(Status status);
-        }
     }
 }

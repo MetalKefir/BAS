@@ -14,54 +14,37 @@ namespace BAS
     {
         // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени класса "Service1" в коде, SVC-файле и файле конфигурации.
         // ПРИМЕЧАНИЕ. Чтобы запустить клиент проверки WCF для тестирования службы, выберите элементы Service1.svc или Service1.svc.cs в обозревателе решений и начните отладку.
-        public class ProductsService : IProductsServiceContract
+        public sealed class ProductsService : BaseService, IProductsServiceContract
         {
-            public (bool IsSuccessful, string messeage) Create(IEnumerable<Product> parametrs)
+
+            public ProductsService() : base(typeof(Product)) { }
+
+            public (bool IsSuccessful, string messeage) Create(ICollection<Product> parametr)
             {
                 throw new NotImplementedException();
             }
 
-            public (bool IsSuccessful, string messeage) Delete(IEnumerable<Product> parametrs)
+            public (bool IsSuccessful, string messeage) Delete(IReadOnlyCollection<Product> parametr)
             {
                 throw new NotImplementedException();
             }
 
-            public IEnumerable<Product> GetAll()
+            public ICollection<Product> GetAll()
             {
                 throw new NotImplementedException();
             }
 
-            public IEnumerable<Product> GetByColor(IEnumerable<string> colors)
+            public ICollection<Product> GetBy(string fieldName, object parametr)
             {
                 throw new NotImplementedException();
             }
 
-            public Product GetById(int Id)
+            public ICollection<Product> GetByPrice(int minprice, int? maxprice = null)
             {
                 throw new NotImplementedException();
             }
 
-            public IEnumerable<Product> GetByManufacturer(IEnumerable<string> manufacturers)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IEnumerable<Product> GetByName(string name)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IEnumerable<Product> GetByPrice(int minprice, int? maxprice = null)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IEnumerable<Product> GetByType(IEnumerable<string> types)
-            {
-                throw new NotImplementedException();
-            }
-
-            public (bool IsSuccessful, string messeage) Update(IEnumerable<Product> parametrs)
+            public (bool IsSuccessful, string messeage) Update(IReadOnlyCollection<Product> parametr)
             {
                 throw new NotImplementedException();
             }

@@ -13,44 +13,32 @@ namespace BAS
     {
         // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени класса "OrdersService" в коде, SVC-файле и файле конфигурации.
         // ПРИМЕЧАНИЕ. Чтобы запустить клиент проверки WCF для тестирования службы, выберите элементы OrdersService.svc или OrdersService.svc.cs в обозревателе решений и начните отладку.
-        public class OrdersService : IOrdersServiceContract
+        public sealed class OrdersService : BaseService, IOrdersServiceContract
         {
-            public (bool IsSuccessful, string messeage) Create(IEnumerable<Order> parametrs)
+
+            public OrdersService() : base(typeof(Order)) { }
+
+            public (bool IsSuccessful, string messeage) Create(ICollection<Order> parametr)
             {
                 throw new NotImplementedException();
             }
 
-            public (bool IsSuccessful, string messeage) Delete(IEnumerable<Order> parametrs)
+            public (bool IsSuccessful, string messeage) Delete(IReadOnlyCollection<Order> parametr)
             {
                 throw new NotImplementedException();
             }
 
-            public IEnumerable<Order> GetAll()
+            public ICollection<Order> GetAll()
             {
                 throw new NotImplementedException();
             }
 
-            public IEnumerable<Order> GetByCustomer(int customerId)
+            public ICollection<Order> GetBy(string fieldName, object parametr)
             {
                 throw new NotImplementedException();
             }
 
-            public Order GetById(int Id)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IEnumerable<Order> GetByProduct(IEnumerable<Product> products)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IEnumerable<Order> GetByStatus(Status status)
-            {
-                throw new NotImplementedException();
-            }
-
-            public (bool IsSuccessful, string messeage) Update(IEnumerable<Order> parametrs)
+            public (bool IsSuccessful, string messeage) Update(IReadOnlyCollection<Order> parametr)
             {
                 throw new NotImplementedException();
             }

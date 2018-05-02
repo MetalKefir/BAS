@@ -10,7 +10,7 @@ namespace BAS
         [DataContract]
         public class Order
         {
-            [DataMember] public int Id { get; set; }
+            [DataMember] public int Id { get; private set; }
             [DataMember] public Customer OrderCustomer { get; set; }
             [DataMember] public DeliveriService DeliveriService { get; set; }
             [DataMember] public DateTime DateOrder { get; set; }
