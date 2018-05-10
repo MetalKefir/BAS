@@ -78,6 +78,12 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataModelLibrary\DataModelLibrary.csproj">
+      <Project>{260f0350-2240-4313-923f-1d8c0180a107}</Project>
+      <Name>DataModelLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\ServiceReference\" />
   </ItemGroup>
   <ItemGroup>
@@ -94,12 +100,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DataModelLibrary\DataModelLibrary.csproj">
-      <Project>{260f0350-2240-4313-923f-1d8c0180a107}</Project>
-      <Name>DataModelLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

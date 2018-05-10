@@ -18,12 +18,17 @@ namespace BAS
 
             public OrdersService() : base(typeof(Order)) { }
 
-            public (bool IsSuccessful, string messeage) Create(ICollection<Order> parametr)
+            public (bool IsSuccessful, object messeage) Create(Order parametr)
             {
                 throw new NotImplementedException();
             }
 
-            public (bool IsSuccessful, string messeage) Delete(IReadOnlyCollection<Order> parametr)
+            public (bool IsSuccessful, string messeage) Delete(ICollection<Order> parametrs)
+            {
+                throw new NotImplementedException();
+            }
+
+            public (bool IsSuccessful, string messeage) Update(ICollection<Order> parametrs)
             {
                 throw new NotImplementedException();
             }
@@ -34,11 +39,6 @@ namespace BAS
             }
 
             public ICollection<Order> GetBy(string fieldName, object parametr)
-            {
-                throw new NotImplementedException();
-            }
-
-            public (bool IsSuccessful, string messeage) Update(IReadOnlyCollection<Order> parametr)
             {
                 throw new NotImplementedException();
             }

@@ -49,15 +49,6 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="UpdateAdress">
-      <soap:operation soapAction="BAS.ServiceModel/CustomersService/UpdateAdress" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="CustomersService">
     <wsdl:port name="BasicHttpBinding_CustomersService" binding="tns:BasicHttpBinding_CustomersService">

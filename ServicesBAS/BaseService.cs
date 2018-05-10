@@ -20,10 +20,13 @@ namespace BAS
 
                 string entityName = new StringBuilder(entity.Name).Append("s").ToString();
 
-                storedProcedure = new Dictionary<string, string>();
-                storedProcedure.Add("create","insert" + entityName);
-                storedProcedure.Add("update", "update" + entityName);
-                storedProcedure.Add("delete", "delete" + entityName);
+                storedProcedure = new Dictionary<string, string>
+                {
+                    { "create", "insert" + entityName },
+                    { "getall", "getall" + entityName },
+                    { "update", "update" + entityName },
+                    { "delete", "delete" + entityName }
+                };
             }
         }
     }

@@ -19,12 +19,17 @@ namespace BAS
 
             public ProductsService() : base(typeof(Product)) { }
 
-            public (bool IsSuccessful, string messeage) Create(ICollection<Product> parametr)
+            public (bool IsSuccessful, object messeage) Create(Product parametr)
             {
                 throw new NotImplementedException();
             }
 
-            public (bool IsSuccessful, string messeage) Delete(IReadOnlyCollection<Product> parametr)
+            public (bool IsSuccessful, string messeage) Delete(ICollection<Product> parametrs)
+            {
+                throw new NotImplementedException();
+            }
+
+            public (bool IsSuccessful, string messeage) Update(ICollection<Product> parametrs)
             {
                 throw new NotImplementedException();
             }
@@ -44,10 +49,6 @@ namespace BAS
                 throw new NotImplementedException();
             }
 
-            public (bool IsSuccessful, string messeage) Update(IReadOnlyCollection<Product> parametr)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

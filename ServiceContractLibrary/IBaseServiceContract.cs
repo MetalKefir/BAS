@@ -10,14 +10,13 @@ namespace BAS
         public interface IBaseServiceContract<T>
         {
             [OperationContract(Name = "Create")]
-            [ServiceKnownType(typeof(IReadOnlyCollection<DataModelLibrary.Customer>))]
-            (bool IsSuccessful, string messeage) Create(ICollection<T> parametr);
+            (bool IsSuccessful, object messeage) Create(T parametr);
 
             [OperationContract(Name = "Update")]
-            (bool IsSuccessful, string messeage) Update(IReadOnlyCollection<T> parametr);
+            (bool IsSuccessful, string messeage) Update(ICollection<T> parametrs);
 
             [OperationContract(Name = "Delete")]
-            (bool IsSuccessful, string messeage) Delete(IReadOnlyCollection<T> parametr);
+            (bool IsSuccessful, string messeage) Delete(ICollection<T> parametrs);
 
             [OperationContract(Name = "GetAll")]
             ICollection<T> GetAll();

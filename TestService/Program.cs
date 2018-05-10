@@ -39,12 +39,42 @@ namespace BAS
                     }
                 };
 
-                
-
                 using (CustomersServiceClient serviceClient = new CustomersServiceClient())
                 {
-                    var rez = serviceClient.Create(customers);
+                    var crez = serviceClient.Create(customers[0]);
+                    customers[0].Id = (int)crez.Item2;
+                    
+                    var gres = serviceClient.GetAll();
+                    foreach (var cus in gres)
+                    {
+                        Console.WriteLine(cus.Id);
+                        Console.WriteLine(cus.FName + " " + cus.LName + " " + cus.MName);
+                        Console.WriteLine(cus.Age);
+                        Console.WriteLine(cus.CustomerAddress);
+                        Console.WriteLine(cus.PhoneNumber);
+                        Console.WriteLine(cus.Email);
+                        Console.WriteLine("\n");
+                    }
 
+                    customers[0].FName = "Петр";
+                    customers[0].Age = 40;
+                    var ures = serviceClient.Update(customers);
+
+                    var gres2 = serviceClient.GetAll();
+                    foreach (var cus in gres2)
+                    {
+                        Console.WriteLine(cus.Id);
+                        Console.WriteLine(cus.FName + " " + cus.LName + " " + cus.MName);
+                        Console.WriteLine(cus.Age);
+                        Console.WriteLine(cus.CustomerAddress);
+                        Console.WriteLine(cus.PhoneNumber);
+                        Console.WriteLine(cus.Email);
+                        Console.WriteLine("\n");
+                    }
+
+                    var dres = serviceClient.Delete(customers);
+
+                    Console.WriteLine(dres.Item1 + " " + dres.Item2);
                     Console.Read();
                     //List<Customer> cus = serviceClient.GetAll().ToList<Customer>();
                 }
