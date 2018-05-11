@@ -13,11 +13,8 @@ namespace BAS
 {
     namespace ServicesBAS
     {
-        // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени класса "CustomersService" в коде, SVC-файле и файле конфигурации.
-        // ПРИМЕЧАНИЕ. Чтобы запустить клиент проверки WCF для тестирования службы, выберите элементы CustomersService.svc или CustomersService.svc.cs в обозревателе решений и начните отладку.
         public sealed class CustomersService : BaseService, ICustomersServiceContract
         {
-            
             public CustomersService() : base(typeof(Customer)) { }
 
             private static List<SqlParameter> GetProcParameters(Customer customer) => new List<SqlParameter>
@@ -34,6 +31,14 @@ namespace BAS
             public (bool IsSuccessful, object messeage) Create(Customer customer)
             {
                 (bool IsSuccessful, object messeage) result = (IsSuccessful : true, messeage : "");
+
+                if (customer == null)
+                {
+                    result.IsSuccessful = false;
+                    result.messeage = "parametr empty";
+
+                    return result;
+                }
 
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -64,11 +69,11 @@ namespace BAS
                 return result;
             }
 
-            public (bool IsSuccessful, string messeage) Delete(ICollection<Customer> parametrs)
+            public (bool IsSuccessful, string messeage) Delete(ICollection<Customer> customers)
             {
                 (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
 
-                if (parametrs==null || parametrs.Count == 0)
+                if (customers==null || customers.Count == 0)
                 {
                     result.IsSuccessful = false;
                     result.messeage = "List of parametrs empty";
@@ -79,9 +84,9 @@ namespace BAS
                 DataTable listOfDelete = new DataTable();
                 listOfDelete.Columns.Add("id", typeof(int));
 
-                foreach (var cus in parametrs)
+                foreach (var customer in customers)
                 {
-                    listOfDelete.Rows.Add(cus.Id);
+                    listOfDelete.Rows.Add(customer.Id);
                 }
 
                 using (var connection = new SqlConnection(connectionString))
@@ -97,18 +102,17 @@ namespace BAS
                     cmd.Parameters["@ids"].Value = listOfDelete;
 
                     int number = cmd.ExecuteNonQuery();
-
                     result.messeage = "Delete " + number.ToString() + " obj";
                 }
 
                 return result;
             }
 
-            public (bool IsSuccessful, string messeage) Update(ICollection<Customer> parametrs)
+            public (bool IsSuccessful, string messeage) Update(ICollection<Customer> customers)
             {
                 (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
 
-                if (parametrs == null || parametrs.Count == 0)
+                if (customers == null || customers.Count == 0)
                 {
                     result.IsSuccessful = false;
                     result.messeage = "List of parametrs empty";
@@ -124,10 +128,12 @@ namespace BAS
                     {
                         CommandType = CommandType.StoredProcedure
                     };
+                    SqlParameter[] sqlParam = null;
+                    int changeCounter = 0;
 
-                    foreach (var customer in parametrs)
+                    foreach (var customer in customers)
                     {
-                        var sqlParam = GetProcParameters(customer)?.ToArray();
+                        sqlParam = GetProcParameters(customer)?.ToArray();
                         if (sqlParam == null)
                         {
                             result.IsSuccessful = false;
@@ -141,9 +147,9 @@ namespace BAS
                         cmd.Parameters["@cusid"].Direction = ParameterDirection.Input;
                         cmd.Parameters["@cusid"].Value = customer.Id;
 
-                        int number = cmd.ExecuteNonQuery();
-                        result.messeage = "Update " + number + " obj";
+                        changeCounter += cmd.ExecuteNonQuery();
                     }
+                    result.messeage = "Update " + changeCounter + " obj";
                 }
 
                 return result;

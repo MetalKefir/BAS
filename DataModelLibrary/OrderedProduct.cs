@@ -18,6 +18,8 @@ namespace BAS
                 this.Product = product;
                 this.Quantity = quantity;
             }
+
+            public OrderedProduct() { }
         }
     }
 }

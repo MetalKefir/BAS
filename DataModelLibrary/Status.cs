@@ -15,6 +15,8 @@ namespace BAS
             public Status(string statusName) =>
                 StatusName = statusName ?? throw new ArgumentNullException(nameof(statusName));
 
+            public Status() { }
+
             public override string ToString()
             {
                 return base.ToString();

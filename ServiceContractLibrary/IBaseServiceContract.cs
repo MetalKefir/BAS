@@ -5,7 +5,6 @@ namespace BAS
 {
     namespace ServiceContractLibrary
     {
-
         [ServiceContract(Namespace = "BAS.ServiceModel", Name = "BaseService")] 
         public interface IBaseServiceContract<T>
         {
@@ -24,6 +23,5 @@ namespace BAS
             [OperationContract(Name = "GetBy")]
             ICollection<T> GetBy(string fieldName, object parametr);
         }
-
     }
 }

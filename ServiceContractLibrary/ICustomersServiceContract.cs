@@ -10,9 +10,7 @@ namespace BAS
 {
     namespace ServiceContractLibrary
     {
-    
         [ServiceContract(Namespace = "BAS.ServiceModel", Name = "CustomersService")]
         public interface ICustomersServiceContract : IBaseServiceContract<Customer> { }
-
     }
 }

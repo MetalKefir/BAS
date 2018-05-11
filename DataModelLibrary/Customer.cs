@@ -32,10 +32,7 @@ namespace BAS
                 CustomerAddress = customerAddress ?? throw new ArgumentNullException(nameof(customerAddress));
             }
 
-            public Customer()
-            {
-
-            }
+            public Customer() { }
 
             public override string ToString()
             {

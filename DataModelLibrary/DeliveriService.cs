@@ -15,6 +15,8 @@ namespace BAS
             public DeliveriService(string serviceName) =>
                 ServiceName = serviceName ?? throw new ArgumentNullException(nameof(serviceName));
 
+            public DeliveriService() { }
+
             public override string ToString()
             {
                 return base.ToString();

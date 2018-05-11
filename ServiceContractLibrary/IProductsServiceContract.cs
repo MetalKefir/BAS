@@ -10,15 +10,11 @@ namespace BAS
 {
     namespace ServiceContractLibrary
     {
-
         [ServiceContract(Namespace = "BAS.ServiceModel", Name = "ProductsService")]
         public interface IProductsServiceContract : IBaseServiceContract<Product>
         {
-
             [OperationContract(Name = "GetByPrice")]
             ICollection<Product> GetByPrice(int minprice, int? maxprice = null);
-
         }
-
     }
 }
