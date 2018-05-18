@@ -39,7 +39,7 @@ namespace BAS
                 if (product == null)
                 {
                     result.IsSuccessful = false;
-                    result.messeage = "parametr empty";
+                    result.messeage = "NullRef";
 
                     return result;
                 }
@@ -80,7 +80,7 @@ namespace BAS
                 if (products == null || products.Count == 0)
                 {
                     result.IsSuccessful = false;
-                    result.messeage = "List of parametrs empty";
+                    result.messeage = "List of Parameters empty";
 
                     return result;
                 }
@@ -119,7 +119,7 @@ namespace BAS
                 if (products == null || products.Count == 0)
                 {
                     result.IsSuccessful = false;
-                    result.messeage = "List of parametrs empty";
+                    result.messeage = "List of Parameters empty";
 
                     return result;
                 }
@@ -203,7 +203,7 @@ namespace BAS
                 return products;
             }
 
-            public ICollection<Product> GetBy(string fieldName, object parametr)
+            public ICollection<Product> GetBy(string fieldName, object parameter)
             {
                 throw new NotImplementedException();
             }

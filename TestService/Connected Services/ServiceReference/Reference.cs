@@ -19,22 +19,22 @@ namespace TestService.ServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.ValueTuple<bool, string>))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BAS.DataModelLibrary.Customer))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.List<BAS.DataModelLibrary.Customer>))]
-        System.ValueTuple<bool, object> Create(BAS.DataModelLibrary.Customer parametr);
+        System.ValueTuple<bool, object> Create(BAS.DataModelLibrary.Customer parameter);
         
         [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/Create", ReplyAction="BAS.ServiceModel/BaseService/CreateResponse")]
-        System.Threading.Tasks.Task<System.ValueTuple<bool, object>> CreateAsync(BAS.DataModelLibrary.Customer parametr);
+        System.Threading.Tasks.Task<System.ValueTuple<bool, object>> CreateAsync(BAS.DataModelLibrary.Customer parameter);
         
         [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/Update", ReplyAction="BAS.ServiceModel/BaseService/UpdateResponse")]
-        System.ValueTuple<bool, string> Update(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parametrs);
+        System.ValueTuple<bool, string> Update(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parameters);
         
         [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/Update", ReplyAction="BAS.ServiceModel/BaseService/UpdateResponse")]
-        System.Threading.Tasks.Task<System.ValueTuple<bool, string>> UpdateAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parametrs);
+        System.Threading.Tasks.Task<System.ValueTuple<bool, string>> UpdateAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parameters);
         
         [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/Delete", ReplyAction="BAS.ServiceModel/BaseService/DeleteResponse")]
-        System.ValueTuple<bool, string> Delete(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parametrs);
+        System.ValueTuple<bool, string> Delete(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parameters);
         
         [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/Delete", ReplyAction="BAS.ServiceModel/BaseService/DeleteResponse")]
-        System.Threading.Tasks.Task<System.ValueTuple<bool, string>> DeleteAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parametrs);
+        System.Threading.Tasks.Task<System.ValueTuple<bool, string>> DeleteAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parameters);
         
         [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/GetAll", ReplyAction="BAS.ServiceModel/BaseService/GetAllResponse")]
         System.Collections.Generic.List<BAS.DataModelLibrary.Customer> GetAll();
@@ -47,10 +47,10 @@ namespace TestService.ServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.ValueTuple<bool, string>))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BAS.DataModelLibrary.Customer))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.List<BAS.DataModelLibrary.Customer>))]
-        System.Collections.Generic.List<BAS.DataModelLibrary.Customer> GetBy(string fieldName, object parametr);
+        System.Collections.Generic.List<BAS.DataModelLibrary.Customer> GetBy(string fieldName, object parameter);
         
         [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/GetBy", ReplyAction="BAS.ServiceModel/BaseService/GetByResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.List<BAS.DataModelLibrary.Customer>> GetByAsync(string fieldName, object parametr);
+        System.Threading.Tasks.Task<System.Collections.Generic.List<BAS.DataModelLibrary.Customer>> GetByAsync(string fieldName, object parameter);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -80,28 +80,28 @@ namespace TestService.ServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public System.ValueTuple<bool, object> Create(BAS.DataModelLibrary.Customer parametr) {
-            return base.Channel.Create(parametr);
+        public System.ValueTuple<bool, object> Create(BAS.DataModelLibrary.Customer parameter) {
+            return base.Channel.Create(parameter);
         }
         
-        public System.Threading.Tasks.Task<System.ValueTuple<bool, object>> CreateAsync(BAS.DataModelLibrary.Customer parametr) {
-            return base.Channel.CreateAsync(parametr);
+        public System.Threading.Tasks.Task<System.ValueTuple<bool, object>> CreateAsync(BAS.DataModelLibrary.Customer parameter) {
+            return base.Channel.CreateAsync(parameter);
         }
         
-        public System.ValueTuple<bool, string> Update(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parametrs) {
-            return base.Channel.Update(parametrs);
+        public System.ValueTuple<bool, string> Update(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parameters) {
+            return base.Channel.Update(parameters);
         }
         
-        public System.Threading.Tasks.Task<System.ValueTuple<bool, string>> UpdateAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parametrs) {
-            return base.Channel.UpdateAsync(parametrs);
+        public System.Threading.Tasks.Task<System.ValueTuple<bool, string>> UpdateAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parameters) {
+            return base.Channel.UpdateAsync(parameters);
         }
         
-        public System.ValueTuple<bool, string> Delete(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parametrs) {
-            return base.Channel.Delete(parametrs);
+        public System.ValueTuple<bool, string> Delete(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parameters) {
+            return base.Channel.Delete(parameters);
         }
         
-        public System.Threading.Tasks.Task<System.ValueTuple<bool, string>> DeleteAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parametrs) {
-            return base.Channel.DeleteAsync(parametrs);
+        public System.Threading.Tasks.Task<System.ValueTuple<bool, string>> DeleteAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Customer> parameters) {
+            return base.Channel.DeleteAsync(parameters);
         }
         
         public System.Collections.Generic.List<BAS.DataModelLibrary.Customer> GetAll() {
@@ -112,12 +112,12 @@ namespace TestService.ServiceReference {
             return base.Channel.GetAllAsync();
         }
         
-        public System.Collections.Generic.List<BAS.DataModelLibrary.Customer> GetBy(string fieldName, object parametr) {
-            return base.Channel.GetBy(fieldName, parametr);
+        public System.Collections.Generic.List<BAS.DataModelLibrary.Customer> GetBy(string fieldName, object parameter) {
+            return base.Channel.GetBy(fieldName, parameter);
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.List<BAS.DataModelLibrary.Customer>> GetByAsync(string fieldName, object parametr) {
-            return base.Channel.GetByAsync(fieldName, parametr);
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<BAS.DataModelLibrary.Customer>> GetByAsync(string fieldName, object parameter) {
+            return base.Channel.GetByAsync(fieldName, parameter);
         }
     }
 }

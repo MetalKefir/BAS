@@ -5,7 +5,7 @@
   <xs:element name="Create">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="parametr" nillable="true" type="q1:Product" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="Parameter" nillable="true" type="q1:Product" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -19,7 +19,7 @@
   <xs:element name="Update">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="parametrs" nillable="true" type="q3:ArrayOfProduct" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="Parameters" nillable="true" type="q3:ArrayOfProduct" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -33,7 +33,7 @@
   <xs:element name="Delete">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="parametrs" nillable="true" type="q5:ArrayOfProduct" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="Parameters" nillable="true" type="q5:ArrayOfProduct" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -60,7 +60,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="fieldName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="parametr" nillable="true" type="xs:anyType" />
+        <xs:element minOccurs="0" name="Parameter" nillable="true" type="xs:anyType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

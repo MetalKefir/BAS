@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Data.SqlClient;
 using TestService.ServiceReference;
+using TestService.ServiceReference1;
 using TestService.ProductService;
 using BAS.DataModelLibrary;
 
@@ -17,9 +18,19 @@ namespace BAS
         {
             static void Main(string[] args)
             {
-                //TestCustomersService();
-                //TestProductsService();
-                //TestOrdersService();
+                Console.WriteLine("Test Customers Service: ");
+                Console.Read();
+                TestCustomersService();
+
+                Console.WriteLine("\nTest Products Service: ");
+                Console.Read();
+                TestProductsService();
+
+                Console.WriteLine("\nTest Orders Service: ");
+                Console.Read();
+                TestOrdersService();
+
+                Console.Read();
             }
 
             private static void TestCustomersService()
@@ -41,9 +52,14 @@ namespace BAS
 
                 using (CustomersServiceClient serviceClient = new CustomersServiceClient())
                 {
+                    //Insert
+                    Console.WriteLine("1. Insert data:");
                     var crez = serviceClient.Create(customers[0]);
                     customers[0].Id = (int)crez.Item2;
+                    Console.WriteLine("Insert data\n");
 
+                    //GetAll
+                    Console.WriteLine("2. Viewing data:");
                     var gres = serviceClient.GetAll();
                     foreach (var cus in gres)
                     {
@@ -53,13 +69,17 @@ namespace BAS
                         Console.WriteLine(cus.CustomerAddress);
                         Console.WriteLine(cus.PhoneNumber);
                         Console.WriteLine(cus.Email);
-                        Console.WriteLine("\n");
                     }
 
+                    //Update
+                    Console.WriteLine("\n3. Update data:");
                     customers[0].FName = "Петр";
                     customers[0].Age = 40;
                     var ures = serviceClient.Update(customers);
+                    Console.WriteLine(ures.Item2 + "\n");
 
+                    //GetAll
+                    Console.WriteLine("4. Viewing data:");
                     var gres2 = serviceClient.GetAll();
                     foreach (var cus in gres2)
                     {
@@ -69,14 +89,25 @@ namespace BAS
                         Console.WriteLine(cus.CustomerAddress);
                         Console.WriteLine(cus.PhoneNumber);
                         Console.WriteLine(cus.Email);
-                        Console.WriteLine("\n");
                     }
 
+                    //Delete
+                    Console.WriteLine("\n5. Deleting data:");
                     var dres = serviceClient.Delete(customers);
+                    Console.WriteLine(dres.Item2 + "\n");
 
-                    Console.WriteLine(dres.Item1 + " " + dres.Item2);
-                    Console.Read();
-
+                    //GetAll
+                    Console.WriteLine("6. Viewing data:");
+                    var gres3 = serviceClient.GetAll();
+                    foreach (var cus in gres3)
+                    {
+                        Console.WriteLine(cus.Id);
+                        Console.WriteLine(cus.FName + " " + cus.LName + " " + cus.MName);
+                        Console.WriteLine(cus.Age);
+                        Console.WriteLine(cus.CustomerAddress);
+                        Console.WriteLine(cus.PhoneNumber);
+                        Console.WriteLine(cus.Email);
+                    }
                 }
             }
 
@@ -136,11 +167,92 @@ namespace BAS
                     var gres3 = client.GetAll();
                     foreach (var product in gres3)
                         Console.WriteLine(product.Articulus + " " + product.Name + " " + product.Color);
-                    Console.Read();
                 }
             }
 
-            private static void TestOrdersService() { }
+            private static void TestOrdersService()
+            {
+                List<Order> orders = new List<Order>
+                {
+                    new Order()
+                    {
+                        Id = null,
+                        DateOrder = DateTime.Now,
+                        DeliveryService = new DeliveriService("Self"),
+                        OrderCustomer = new Customer {Id=1},
+                        Comment = "",
+                        TotalSum = 340,
+                        OrderStatuses = new List<OrderStatus>
+                        {
+                            new OrderStatus
+                            {
+                                Status = new Status("moderation"),
+                                DateChange = DateTime.Now
+                            }
+                        },
+                        OrderList = new List<OrderedProduct>
+                        {
+                            new OrderedProduct
+                            {
+                                Product = new Product { Articulus = 1},
+                                Quantity = 5
+                            },
+                            new OrderedProduct
+                            {
+                                Product = new Product { Articulus = 2},
+                                Quantity = 2
+                            }
+                        }
+                    }
+                };
+
+                using (OrdersServiceClient client = new OrdersServiceClient())
+                {
+                    //Insert
+                    Console.WriteLine("1. Insert data:");
+                    var cres = client.Create(orders[0]);
+                    orders[0].Id = (int)cres.Item2;
+                    Console.WriteLine("Insert data\n");
+
+                    //GetAll
+                    Console.WriteLine("2. Viewing data:");
+                    var gres = client.GetAll();
+                    foreach (var order in gres)
+                        Console.WriteLine(order.Id + " " + order.DateOrder + " " + order.OrderCustomer.Id);
+
+                    //Update
+                    Console.WriteLine("\n3. Update data:");
+                    orders[0].TotalSum = 80;
+                    orders[0].Comment = "12212121";
+                    orders[0].DeliveryService = new DeliveriService("RusPochta");
+                    orders[0].OrderList[0].Quantity = 8;
+                    orders[0].OrderList[0].Quantity = 9;
+                    orders[0].OrderList.Add(new OrderedProduct
+                    {
+                        Product = new Product { Articulus = 3 },
+                        Quantity = 4
+                    });
+                    var ures = client.Update(orders);
+                    Console.WriteLine(ures.Item2 + "\n");
+
+                    //GetAll
+                    Console.WriteLine("4. Viewing data:");
+                    var gres2 = client.GetAll();
+                    foreach (var order in gres2)
+                        Console.WriteLine(order.Id + " " + order.DateOrder + " " + order.OrderCustomer.Id);
+
+                    //Delete
+                    Console.WriteLine("\n5. Deleting data:");
+                    var dres = client.Delete(orders);
+                    Console.WriteLine(dres.Item2 + "\n");
+
+                    //GetAll
+                    Console.WriteLine("6. Viewing data:");
+                    var gres3 = client.GetAll();
+                    foreach (var order in gres3)
+                        Console.WriteLine(order.Id + " " + order.DateOrder + " " + order.OrderCustomer.Id);
+                }
+            }
         }
     }
 }

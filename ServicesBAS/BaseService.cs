@@ -15,7 +15,7 @@ namespace BAS
     {
         public abstract class BaseService
         {
-            protected readonly string connectionString;
+            protected readonly string  connectionString;
             protected readonly Dictionary<string, string> storedProcedure;
 
             public BaseService(Type entity)
@@ -31,6 +31,7 @@ namespace BAS
                     { "update", "update" + entityName },
                     { "delete", "delete" + entityName }
                 };
+
             }
         }
     }

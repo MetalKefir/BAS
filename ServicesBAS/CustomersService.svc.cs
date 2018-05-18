@@ -30,14 +30,14 @@ namespace BAS
 
             public (bool IsSuccessful, object messeage) Create(Customer customer)
             {
-                (bool IsSuccessful, object messeage) result = (IsSuccessful : true, messeage : "");
+                (bool IsSuccessful, object messeage) result = (IsSuccessful: true, messeage: "");
 
                 if (customer == null)
-                {
-                    result.IsSuccessful = false;
-                    result.messeage = "parametr empty";
+                { 
+                result.IsSuccessful = false;
+                result.messeage = "NullRef";
 
-                    return result;
+                return result;
                 }
 
                 using (var connection = new SqlConnection(connectionString))
@@ -76,7 +76,7 @@ namespace BAS
                 if (customers==null || customers.Count == 0)
                 {
                     result.IsSuccessful = false;
-                    result.messeage = "List of parametrs empty";
+                    result.messeage = "List of Parameters empty";
 
                     return result;
                 }
@@ -115,7 +115,7 @@ namespace BAS
                 if (customers == null || customers.Count == 0)
                 {
                     result.IsSuccessful = false;
-                    result.messeage = "List of parametrs empty";
+                    result.messeage = "List of Parameters empty";
 
                     return result;
                 }
@@ -198,7 +198,7 @@ namespace BAS
                 return customers;
             }
 
-            public ICollection<Customer> GetBy(string fieldName, object parametr)
+            public ICollection<Customer> GetBy(string fieldName, object parameter)
             {
                 throw new NotImplementedException();
             }
