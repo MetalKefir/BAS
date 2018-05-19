@@ -16,7 +16,7 @@
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <UseIISExpress>false</UseIISExpress>
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>true</Use64BitIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -71,6 +71,7 @@
     <Compile Include="CustomersService.svc.cs">
       <DependentUpon>CustomersService.svc</DependentUpon>
     </Compile>
+    <Compile Include="ISqlRequestHelper.cs" />
     <Compile Include="OrdersService.svc.cs">
       <DependentUpon>OrdersService.svc</DependentUpon>
     </Compile>
@@ -78,6 +79,7 @@
       <DependentUpon>ProductsService.svc</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlRequestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
