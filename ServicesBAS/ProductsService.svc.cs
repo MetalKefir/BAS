@@ -79,7 +79,7 @@ namespace BAS
                 command.Parameters.Add("@Id", SqlDbType.Int);
                 command.Parameters["@Id"].Direction = ParameterDirection.Output;
 
-                RequestHelper.CUDQuery(connectionString, command);
+                RequestHelper.CUDQuery(command);
                 result.messeage = RequestHelper.CommandsResult;
 
                 return result;
@@ -113,7 +113,7 @@ namespace BAS
                 command.Parameters["@ids"].TypeName = "intTable";
                 command.Parameters["@ids"].Value = listOfDelete;
 
-                RequestHelper.CUDQuery(connectionString, command);
+                RequestHelper.CUDQuery(command);
                 result.messeage = "Delete " + RequestHelper.CommandsResult + " obj";
 
                 return result;
@@ -153,7 +153,7 @@ namespace BAS
                     listSqlCommands[listSqlCommands.Count - 1].Parameters.AddRange(sqlParameters);
                 }
 
-                RequestHelper.CUDQuery(connectionString, listSqlCommands);
+                RequestHelper.CUDQuery(listSqlCommands);
                 result.messeage = "Update " + RequestHelper.CommandsResult + " obj";
 
                 return result;
@@ -168,7 +168,7 @@ namespace BAS
                     CommandType = CommandType.StoredProcedure
                 };
 
-                foreach (var product in RequestHelper.ReadQuery(connectionString, command, DataReaderConverter))
+                foreach (var product in RequestHelper.ReadQuery(command, DataReaderConverter))
                 {
                     products.Add(product);
                 }
@@ -176,7 +176,7 @@ namespace BAS
                 return products;
             }
 
-            public ICollection<Product> GetBy(string fieldName, object parameter)
+            public ICollection<Product> GetBy(string fieldName, object value)
             {
                 throw new NotImplementedException();
             }

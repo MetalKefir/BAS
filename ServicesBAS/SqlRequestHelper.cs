@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace BAS
 {
@@ -11,9 +13,23 @@ namespace BAS
     {
         public class SqlRequestHelper<T> : ISqlRequestHelper<T> where T : class
         {
-            public int CommandsResult { get; private set; }
+            private int commandResult;
+            private readonly string connectionString;
 
-            public void CUDQuery(string connectionString, List<SqlCommand> listSqlCommands)
+            public int CommandsResult
+            {
+                get
+                {
+                    return commandResult;
+                }
+            }
+
+            public SqlRequestHelper()
+            {
+                connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            }
+
+            public void CUDQuery(List<SqlCommand> listSqlCommands, [CallerMemberName] string callerName = null)
             {
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -25,12 +41,12 @@ namespace BAS
 
                         command.ExecuteNonQuery();
 
-                        CommandsResult++;
+                        commandResult++;
                     }
                 }
             }
 
-            public void CUDQuery(string connectionString, SqlCommand sqlCommand)
+            public void CUDQuery(SqlCommand sqlCommand, [CallerMemberName] string callerName = null)
             {
                 using (var connection = new SqlConnection(connectionString))
                 {
@@ -38,14 +54,14 @@ namespace BAS
 
                     sqlCommand.Connection = connection;
 
-                    CommandsResult = sqlCommand.ExecuteNonQuery();
+                    commandResult = sqlCommand.ExecuteNonQuery();
 
-                    if (sqlCommand.CommandText.Contains("insert"))
-                        CommandsResult = (int)sqlCommand.Parameters["@Id"].Value;
+                    if (callerName == "Create")
+                        commandResult = (int)sqlCommand.Parameters["@Id"].Value;
                 }
             }
 
-            public IEnumerable<T> ReadQuery(string connectionString, SqlCommand command, Func<SqlDataReader, T> DataReaderConverter)
+            public IEnumerable<T> ReadQuery(SqlCommand command, Func<SqlDataReader, T> DataReaderConverter, [CallerMemberName] string callerName = null)
             {
                 SqlDataReader reader = null;
 

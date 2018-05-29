@@ -25,13 +25,13 @@ namespace BAS
                 TestCustomersService();
                 Console.WriteLine("\nTest Customers Successful");
 
-                Console.WriteLine("\nTest Products Service: ");
-                TestProductsService();
-                Console.WriteLine("\nTest Products Successful");
+                //Console.WriteLine("\nTest Products Service: ");
+                //TestProductsService();
+                //Console.WriteLine("\nTest Products Successful");
 
-                Console.WriteLine("\nTest Orders Service: ");
-                TestOrdersService();
-                Console.WriteLine("\nTest Orders Successful");
+                //Console.WriteLine("\nTest Orders Service: ");
+                //TestOrdersService();
+                //Console.WriteLine("\nTest Orders Successful");
 
                 Console.Read();
                 Console.Read();
@@ -56,62 +56,82 @@ namespace BAS
 
                 using (CustomersServiceClient serviceClient = new CustomersServiceClient())
                 {
-                    //Insert
-                    Console.WriteLine("1. Insert data:");
-                    var crez = serviceClient.Create(customers[0]);
-                    customers[0].Id = (int)crez.Item2;
-                    Console.WriteLine("Insert data\n");
+                    ////Insert
+                    //Console.WriteLine("1. Insert data:");
+                    //var crez = serviceClient.Create(customers[0]);
+                    //customers[0].Id = (int)crez.Item2;
+                    //Console.WriteLine("Insert data\n");
 
                     //GetAll
                     Console.WriteLine("2. Viewing data:");
-                    var gres = serviceClient.GetAll();
-                    foreach (var cus in gres)
-                    {
-                        Console.WriteLine(cus.Id);
-                        Console.WriteLine(cus.FName + " " + cus.LName + " " + cus.MName);
-                        Console.WriteLine(cus.Age);
-                        Console.WriteLine(cus.CustomerAddress);
-                        Console.WriteLine(cus.PhoneNumber);
-                        Console.WriteLine(cus.Email);
+                    System.Diagnostics.Stopwatch startTime;
+                    System.TimeSpan resultTime;
+                    string elapsedTime;
+
+                    for (int i=0; i<40; i++)
+                    { 
+                        Console.WriteLine("\nRun Test");
+
+                        startTime = System.Diagnostics.Stopwatch.StartNew();
+                        serviceClient.GetAll();
+                        startTime.Stop();
+                        resultTime = startTime.Elapsed;
+
+                        elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:000}",
+                                                    resultTime.Hours,
+                                                    resultTime.Minutes,
+                                                    resultTime.Seconds,
+                                                    resultTime.Milliseconds);
+
+                        Console.WriteLine("End Test Time work: {0}", elapsedTime);
                     }
+                    //foreach (var cus in gres)
+                    //{
+                    //    Console.WriteLine(cus.Id);
+                    //    Console.WriteLine(cus.FName + " " + cus.LName + " " + cus.MName);
+                    //    Console.WriteLine(cus.Age);
+                    //    Console.WriteLine(cus.CustomerAddress);
+                    //    Console.WriteLine(cus.PhoneNumber);
+                    //    Console.WriteLine(cus.Email);
+                    //}
 
-                    //Update
-                    Console.WriteLine("\n3. Update data:");
-                    customers[0].FName = "Петр";
-                    customers[0].Age = 40;
-                    var ures = serviceClient.Update(customers);
-                    Console.WriteLine(ures.Item2 + "\n");
+                    ////Update
+                    //Console.WriteLine("\n3. Update data:");
+                    //customers[0].FName = "Петр";
+                    //customers[0].Age = 40;
+                    //var ures = serviceClient.Update(customers);
+                    //Console.WriteLine(ures.Item2 + "\n");
 
-                    //GetAll
-                    Console.WriteLine("4. Viewing data:");
-                    var gres2 = serviceClient.GetAll();
-                    foreach (var cus in gres2)
-                    {
-                        Console.WriteLine(cus.Id);
-                        Console.WriteLine(cus.FName + " " + cus.LName + " " + cus.MName);
-                        Console.WriteLine(cus.Age);
-                        Console.WriteLine(cus.CustomerAddress);
-                        Console.WriteLine(cus.PhoneNumber);
-                        Console.WriteLine(cus.Email);
-                    }
+                    ////GetAll
+                    //Console.WriteLine("4. Viewing data:");
+                    //var gres2 = serviceClient.GetAll();
+                    //foreach (var cus in gres2)
+                    //{
+                    //    Console.WriteLine(cus.Id);
+                    //    Console.WriteLine(cus.FName + " " + cus.LName + " " + cus.MName);
+                    //    Console.WriteLine(cus.Age);
+                    //    Console.WriteLine(cus.CustomerAddress);
+                    //    Console.WriteLine(cus.PhoneNumber);
+                    //    Console.WriteLine(cus.Email);
+                    //}
 
-                    //Delete
-                    Console.WriteLine("\n5. Deleting data:");
-                    var dres = serviceClient.Delete(customers);
-                    Console.WriteLine(dres.Item2 + "\n");
+                    ////Delete
+                    //Console.WriteLine("\n5. Deleting data:");
+                    //var dres = serviceClient.Delete(customers);
+                    //Console.WriteLine(dres.Item2 + "\n");
 
-                    //GetAll
-                    Console.WriteLine("6. Viewing data:");
-                    var gres3 = serviceClient.GetAll();
-                    foreach (var cus in gres3)
-                    {
-                        Console.WriteLine(cus.Id);
-                        Console.WriteLine(cus.FName + " " + cus.LName + " " + cus.MName);
-                        Console.WriteLine(cus.Age);
-                        Console.WriteLine(cus.CustomerAddress);
-                        Console.WriteLine(cus.PhoneNumber);
-                        Console.WriteLine(cus.Email);
-                    }
+                    ////GetAll
+                    //Console.WriteLine("6. Viewing data:");
+                    //var gres3 = serviceClient.GetAll();
+                    //foreach (var cus in gres3)
+                    //{
+                    //    Console.WriteLine(cus.Id);
+                    //    Console.WriteLine(cus.FName + " " + cus.LName + " " + cus.MName);
+                    //    Console.WriteLine(cus.Age);
+                    //    Console.WriteLine(cus.CustomerAddress);
+                    //    Console.WriteLine(cus.PhoneNumber);
+                    //    Console.WriteLine(cus.Email);
+                    //}
                 }
             }
 

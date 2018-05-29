@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace BAS
 {
@@ -11,11 +12,13 @@ namespace BAS
     {
         public interface ISqlRequestHelper<T>
         {
-            void CUDQuery(string connectionString, List<SqlCommand> listSqlCommands);
+            int CommandsResult { get; }
 
-            void CUDQuery(string connectionString, SqlCommand sqlCommand);
+            void CUDQuery(List<SqlCommand> listSqlCommands, [CallerMemberName] string callerName = null);
 
-            IEnumerable<T> ReadQuery(string connectionString, SqlCommand command, Func<SqlDataReader, T> DataReaderConverter);
+            void CUDQuery(SqlCommand sqlCommand, [CallerMemberName] string callerName = null);
+
+            IEnumerable<T> ReadQuery(SqlCommand command, Func<SqlDataReader, T> DataReaderConverter, [CallerMemberName] string callerName = null);
         }
     }
 }
