@@ -21,7 +21,7 @@ namespace BAS
             ICollection<T> GetAll();
 
             [OperationContract(Name = "GetBy")]
-            ICollection<T> GetBy(string fieldName, object parameter);
+            ICollection<T> GetBy(string fieldName, object value);
         }
     }
 }

@@ -10,6 +10,7 @@ namespace BAS
         [DataContract]
         public class Status
         {
+            [DataMember] public int Id { get; set; }
             [DataMember] public string StatusName { get; set; }
 
             public Status(string statusName) =>

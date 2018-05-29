@@ -13,12 +13,27 @@ namespace BAS
 {
     namespace ServicesBAS
     {
-        // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени класса "OrdersService" в коде, SVC-файле и файле конфигурации.
-        // ПРИМЕЧАНИЕ. Чтобы запустить клиент проверки WCF для тестирования службы, выберите элементы OrdersService.svc или OrdersService.svc.cs в обозревателе решений и начните отладку.
-        public sealed class OrdersService : BaseService, IOrdersServiceContract
+        public sealed class OrdersService : BaseService<Order>, IOrdersServiceContract
         {
+            protected override Func<SqlDataReader, Order> DataReaderConverter { get; set; }
 
-            public OrdersService() : base(typeof(Order)) { }
+            public OrdersService() : base(typeof(Order))
+            {
+                DataReaderConverter = (SqlDataReader reader) =>
+                {
+                    Order order = new Order
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        OrderCustomer = new Customer() { Id = Convert.ToInt32(reader["CustomerID"]) },
+                        DateOrder = Convert.ToDateTime(reader["Date"]),
+                        DeliveryService = new DeliveriService(Convert.ToString(reader["DeliveryService"])),
+                        TotalSum = Convert.ToInt64(reader["TotalSum"]),
+                        Comment = Convert.ToString(reader["comment"])
+                    };
+
+                    return order;
+                };
+            }
 
             private static List<SqlParameter> GetProcParameters(Order order) => new List<SqlParameter>
             {
@@ -41,7 +56,7 @@ namespace BAS
                     return result;
                 }
 
-                SqlCommand cmd = new SqlCommand(storedProcedure["create"])
+                SqlCommand command = new SqlCommand(storedProcedure["create"])
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -54,7 +69,7 @@ namespace BAS
                     return result;
                 }
                 else
-                    cmd.Parameters.AddRange(sqlParam);
+                    command.Parameters.AddRange(sqlParam);
 
                 DataTable orderedProducts = new DataTable();
                 orderedProducts.Columns.Add("Id", typeof(int));
@@ -65,22 +80,15 @@ namespace BAS
                     orderedProducts.Rows.Add(orderedProduct.Product.Articulus, orderedProduct.Quantity);
                 }
 
-                cmd.Parameters.Add("@orderId", SqlDbType.Int);
-                cmd.Parameters["@orderId"].Direction = ParameterDirection.Output;
+                command.Parameters.Add("@Id", SqlDbType.Int);
+                command.Parameters["@Id"].Direction = ParameterDirection.Output;
 
-                cmd.Parameters.Add("@products", SqlDbType.Structured);
-                cmd.Parameters["@products"].TypeName = "OrderedProduct";
-                cmd.Parameters["@products"].Value = orderedProducts;
+                command.Parameters.Add("@products", SqlDbType.Structured);
+                command.Parameters["@products"].TypeName = "OrderedProduct";
+                command.Parameters["@products"].Value = orderedProducts;
 
-                using (var connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    cmd.Connection = connection;
-
-                    cmd.ExecuteNonQuery();
-                    result.messeage = cmd.Parameters["@orderId"].Value;
-                }
+                RequestHelper.CUDQuery(command);
+                result.messeage = RequestHelper.CommandsResult;
 
                 return result;
             }
@@ -105,21 +113,16 @@ namespace BAS
                     listOfDelete.Rows.Add(order.Id);
                 }
 
-                using (var connection = new SqlConnection(connectionString))
+                SqlCommand command = new SqlCommand(storedProcedure["delete"])
                 {
-                    connection.Open();
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.Add("@ids", SqlDbType.Structured);
+                command.Parameters["@ids"].TypeName = "intTable";
+                command.Parameters["@ids"].Value = listOfDelete;
 
-                    SqlCommand cmd = new SqlCommand(storedProcedure["delete"], connection)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
-                    cmd.Parameters.Add("@ids", SqlDbType.Structured);
-                    cmd.Parameters["@ids"].TypeName = "intTable";
-                    cmd.Parameters["@ids"].Value = listOfDelete;
-
-                    int number = cmd.ExecuteNonQuery();
-                    result.messeage = "Delete " + number.ToString() + " obj";
-                }
+                RequestHelper.CUDQuery(command);
+                result.messeage = "Delete " + RequestHelper.CommandsResult + " obj";
 
                 return result;
             }
@@ -144,108 +147,85 @@ namespace BAS
                 orderedStatuses.Columns.Add("Status", typeof(string));
                 orderedStatuses.Columns.Add("Date", typeof(DateTime));
 
-                using (var connection = new SqlConnection(connectionString))
+                List<SqlParameter[]> listSqlParameters = new List<SqlParameter[]>();
+                List<SqlCommand> listSqlCommands = new List<SqlCommand>();
+
+                foreach (var order in orders)
                 {
-                    connection.Open();
-
-                    SqlCommand cmd = new SqlCommand(storedProcedure["update"], connection)
+                    foreach (var orderedProduct in order.OrderList)
                     {
-                        CommandType = CommandType.StoredProcedure
-                    };
-                    SqlParameter[] sqlParam = null;
-                    int changeCounter = 0;
-
-                    foreach (var order in orders)
-                    {
-                        sqlParam = GetProcParameters(order)?.ToArray();
-                        if (sqlParam == null)
-                        {
-                            result.IsSuccessful = false;
-                            result.messeage = "Failure";
-                            return result;
-                        }
-                        else
-                            cmd.Parameters.AddRange(sqlParam);
-
-                        foreach (var orderedProduct in order.OrderList)
-                        {
-                            orderedProducts.Rows.Add(orderedProduct.Product.Articulus, orderedProduct.Quantity);
-                        }
-
-                        foreach (var orderStatus in order.OrderStatuses)
-                        {
-                            orderedStatuses.Rows.Add(orderStatus.Status.StatusName, orderStatus.DateChange);
-                        }
-
-                        cmd.Parameters.Add("@products", SqlDbType.Structured);
-                        cmd.Parameters["@products"].TypeName = "OrderedProduct";
-                        cmd.Parameters["@products"].Value = orderedProducts;
-
-                        cmd.Parameters.Add("@statusesList", SqlDbType.Structured);
-                        cmd.Parameters["@statusesList"].TypeName = "StatusesOrder";
-                        cmd.Parameters["@statusesList"].Value = orderedStatuses;
-
-                        cmd.Parameters.Add("@orderId", SqlDbType.Int);
-                        cmd.Parameters["@orderId"].Direction = ParameterDirection.Input;
-                        cmd.Parameters["@orderId"].Value = order.Id;
-
-                        changeCounter += cmd.ExecuteNonQuery();
-
-                        orderedProducts.Clear();
-                        orderedStatuses.Clear();
+                        orderedProducts.Rows.Add(orderedProduct.Product.Articulus, orderedProduct.Quantity);
                     }
 
-                    result.messeage = "Update " + changeCounter + " obj";
+                    foreach (var orderStatus in order.OrderStatuses)
+                    {
+                        orderedStatuses.Rows.Add(orderStatus.Status.StatusName, orderStatus.DateChange);
+                    }
+
+                    var sqlPrametrs = GetProcParameters(order);
+                    sqlPrametrs.AddRange
+                    (
+                        new List<SqlParameter>
+                        { 
+                            new SqlParameter()
+                            {
+                                ParameterName = "@orderId",
+                                Value = order.Id,
+                                SqlDbType = SqlDbType.Int
+                            },
+                            new SqlParameter()
+                            {
+                                ParameterName = "@products",
+                                Value = orderedProducts,
+                                SqlDbType = SqlDbType.Structured
+                            },
+                            new SqlParameter()
+                            {
+                                ParameterName = "@statusesList",
+                                Value = orderedStatuses,
+                                SqlDbType = SqlDbType.Structured
+                            }
+                        }
+                    );
+
+                    listSqlParameters.Add(sqlPrametrs?.ToArray());
                 }
-                /*
-    @products OrderedProduct READONLY,
-    @statusesList StatusesOrder READONLY,
- */
+
+                foreach (var sqlParameters in listSqlParameters)
+                {
+                    listSqlCommands.Add(new SqlCommand()
+                    {
+                        CommandText = storedProcedure["update"],
+                        CommandType = CommandType.StoredProcedure,
+                    });
+
+                    listSqlCommands[listSqlCommands.Count - 1].Parameters.AddRange(sqlParameters);
+                }
+
+                RequestHelper.CUDQuery(listSqlCommands);
+                result.messeage = "Update " + RequestHelper.CommandsResult + " obj";
+
                 return result;
             }
 
             public ICollection<Order> GetAll()
             {
-                ICollection<Order> orders = null;
+                ICollection<Order> orders = new List<Order>();
 
-                using (var connection = new SqlConnection(connectionString))
+                SqlCommand command = new SqlCommand(storedProcedure["getall"])
                 {
-                    connection.Open();
+                    CommandType = CommandType.StoredProcedure
+                };
 
-                    SqlCommand cmd = new SqlCommand("GetAllOrders", connection)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
-
-                    SqlDataReader reader = cmd.ExecuteReader();
-
-                    orders = new List<Order>();
-                    Order order;
-
-                    if (reader.HasRows)
-                    {
-                        order = new Order();
-                        while (reader.Read())
-                        {
-                            order.Id = Convert.ToInt32(reader["id"]);
-                            order.OrderCustomer = new Customer() { Id = Convert.ToInt32(reader["CustomerID"]) };
-                            order.DateOrder = Convert.ToDateTime(reader["Date"]);
-                            order.DeliveryService = new DeliveriService(Convert.ToString(reader["DeliveryService"]));
-                            order.TotalSum = Convert.ToInt64(reader["TotalSum"]);
-                            order.Comment = Convert.ToString(reader["comment"]);
-
-                            orders.Add(order);
-                            order = new Order();
-                        }
-                    }
-
-                    reader.Close();
+                foreach (var oreder in RequestHelper.ReadQuery(command, DataReaderConverter))
+                {
+                    orders.Add(oreder);
                 }
 
                 return orders;
             }
 
-            public ICollection<Order> GetBy(string fieldName, object parameter)
+            public ICollection<Order> GetBy(string fieldName, object value)
             {
                 throw new NotImplementedException();
             }

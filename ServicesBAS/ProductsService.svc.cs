@@ -13,12 +13,29 @@ namespace BAS
 {
     namespace ServicesBAS
     {
-        // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени класса "Service1" в коде, SVC-файле и файле конфигурации.
-        // ПРИМЕЧАНИЕ. Чтобы запустить клиент проверки WCF для тестирования службы, выберите элементы Service1.svc или Service1.svc.cs в обозревателе решений и начните отладку.
-        public sealed class ProductsService : BaseService, IProductsServiceContract
+        public sealed class ProductsService : BaseService<Product>, IProductsServiceContract
         {
+            protected override Func<SqlDataReader, Product> DataReaderConverter { get; set; }
 
-            public ProductsService() : base(typeof(Product)) { }
+            public ProductsService() : base(typeof(Product))
+            {
+                DataReaderConverter = (SqlDataReader reader) =>
+                {
+                    Product product = new Product
+                    {
+                        Articulus = Convert.IsDBNull(reader["id"]) ? null : (int?)Convert.ToUInt32(reader["id"]),
+                        Name = Convert.ToString(reader["Name"]),
+                        Color = Convert.ToString(reader["Color"]),
+                        Manufacturer = Convert.ToString(reader["Manufacturer"]),
+                        Price = Convert.ToDecimal(reader["Price"]),
+                        Sale = Convert.IsDBNull(reader["Sale"]) ? null : (ushort?)Convert.ToUInt16(reader["Sale"]),
+                        Quantity = Convert.ToUInt32(reader["Quantity"]),
+                        Description = Convert.ToString(reader["Description"])
+                    };
+
+                    return product;
+                };
+            }
 
             private static List<SqlParameter> GetProcParameters(Product product) => new List<SqlParameter>
             {
@@ -44,31 +61,26 @@ namespace BAS
                     return result;
                 }
 
-                using (var connection = new SqlConnection(connectionString))
+                SqlCommand command = new SqlCommand(storedProcedure["create"])
                 {
-                    connection.Open();
+                    CommandType = CommandType.StoredProcedure
+                };
 
-                    SqlCommand cmd = new SqlCommand(storedProcedure["create"], connection)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
-
-                    var sqlParam = GetProcParameters(product)?.ToArray();
-                    if (sqlParam == null)
-                    {
-                        result.IsSuccessful = false;
-                        result.messeage = "Failure";
-                        return result;
-                    }
-                    else
-                        cmd.Parameters.AddRange(sqlParam);
-
-                    cmd.Parameters.Add("@prodid", SqlDbType.Int);
-                    cmd.Parameters["@prodid"].Direction = ParameterDirection.Output;
-
-                    cmd.ExecuteNonQuery();
-                    result.messeage = cmd.Parameters["@prodid"].Value;
+                var sqlParam = GetProcParameters(product)?.ToArray();
+                if (sqlParam == null)
+                {
+                    result.IsSuccessful = false;
+                    result.messeage = "Failure";
+                    return result;
                 }
+                else
+                    command.Parameters.AddRange(sqlParam);
+
+                command.Parameters.Add("@Id", SqlDbType.Int);
+                command.Parameters["@Id"].Direction = ParameterDirection.Output;
+
+                RequestHelper.CUDQuery(command);
+                result.messeage = RequestHelper.CommandsResult;
 
                 return result;
             }
@@ -93,21 +105,16 @@ namespace BAS
                     listOfDelete.Rows.Add(customer.Articulus);
                 }
 
-                using (var connection = new SqlConnection(connectionString))
+                SqlCommand command = new SqlCommand(storedProcedure["delete"])
                 {
-                    connection.Open();
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.Add("@ids", SqlDbType.Structured);
+                command.Parameters["@ids"].TypeName = "intTable";
+                command.Parameters["@ids"].Value = listOfDelete;
 
-                    SqlCommand cmd = new SqlCommand(storedProcedure["delete"], connection)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
-                    cmd.Parameters.Add("@ids", SqlDbType.Structured);
-                    cmd.Parameters["@ids"].TypeName = "intTable";
-                    cmd.Parameters["@ids"].Value = listOfDelete;
-
-                    int number = cmd.ExecuteNonQuery();
-                    result.messeage = "Delete " + number.ToString() + " obj";
-                }
+                RequestHelper.CUDQuery(command);
+                result.messeage = "Delete " + RequestHelper.CommandsResult + " obj";
 
                 return result;
             }
@@ -124,86 +131,52 @@ namespace BAS
                     return result;
                 }
 
-                using (var connection = new SqlConnection(connectionString))
+                List<SqlParameter[]> listSqlParameters = new List<SqlParameter[]>();
+                List<SqlCommand> listSqlCommands = new List<SqlCommand>();
+
+                foreach (var product in products)
                 {
-                    connection.Open();
+                    var sqlPrametrs = GetProcParameters(product);
+                    sqlPrametrs.Add(new SqlParameter() { ParameterName = "@prodid", Value = product.Articulus, SqlDbType = SqlDbType.Int, Direction = ParameterDirection.Input });
 
-                    SqlCommand cmd = new SqlCommand(storedProcedure["update"], connection)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
-
-                    SqlParameter[] sqlParam = null;
-                    int changeCounter = 0;
-
-                    foreach (var product in products)
-                    {
-                        sqlParam = GetProcParameters(product)?.ToArray();
-                        if (sqlParam == null)
-                        {
-                            result.IsSuccessful = false;
-                            result.messeage = "Failure";
-                            return result;
-                        }
-                        else
-                            cmd.Parameters.AddRange(sqlParam);
-
-                        cmd.Parameters.Add("@prodid", SqlDbType.Int);
-                        cmd.Parameters["@prodid"].Direction = ParameterDirection.Input;
-                        cmd.Parameters["@prodid"].Value = product.Articulus;
-
-                        changeCounter += cmd.ExecuteNonQuery();
-                    }
-                    result.messeage = "Update " + changeCounter + " obj";
+                    listSqlParameters.Add(sqlPrametrs?.ToArray());
                 }
+
+                foreach (var sqlParameters in listSqlParameters)
+                {
+                    listSqlCommands.Add(new SqlCommand()
+                    {
+                        CommandText = storedProcedure["update"],
+                        CommandType = CommandType.StoredProcedure,
+                    });
+
+                    listSqlCommands[listSqlCommands.Count - 1].Parameters.AddRange(sqlParameters);
+                }
+
+                RequestHelper.CUDQuery(listSqlCommands);
+                result.messeage = "Update " + RequestHelper.CommandsResult + " obj";
 
                 return result;
             }
 
             public ICollection<Product> GetAll()
             {
-                ICollection<Product> products = null;
+                ICollection<Product> products = new List<Product>();
 
-                using (var connection = new SqlConnection(connectionString))
+                SqlCommand command = new SqlCommand(storedProcedure["getall"])
                 {
-                    connection.Open();
+                    CommandType = CommandType.StoredProcedure
+                };
 
-                    SqlCommand cmd = new SqlCommand(storedProcedure["getall"], connection)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
-
-                    SqlDataReader reader = cmd.ExecuteReader();
-
-                    products = new List<Product>();
-                    Product product;
-
-                    if (reader.HasRows)
-                    {
-                        product = new Product();
-                        while (reader.Read())
-                        {
-                            product.Articulus = Convert.IsDBNull(reader["id"]) ? null : (int?)Convert.ToUInt32(reader["id"]);
-                            product.Name = Convert.ToString(reader["Name"]);
-                            product.Color = Convert.ToString(reader["Color"]);
-                            product.Manufacturer = Convert.ToString(reader["Manufacturer"]);
-                            product.Price = Convert.ToDecimal(reader["Price"]);
-                            product.Sale = Convert.IsDBNull(reader["Sale"]) ? null : (ushort?)Convert.ToUInt16(reader["Sale"]);
-                            product.Quantity = Convert.ToUInt32(reader["Quantity"]);
-                            product.Description = Convert.ToString(reader["Description"]);
-                            
-                            products.Add(product);
-                            product = new Product();
-                        }
-                    }
-
-                    reader.Close();
+                foreach (var product in RequestHelper.ReadQuery(command, DataReaderConverter))
+                {
+                    products.Add(product);
                 }
 
                 return products;
             }
 
-            public ICollection<Product> GetBy(string fieldName, object parameter)
+            public ICollection<Product> GetBy(string fieldName, object value)
             {
                 throw new NotImplementedException();
             }
@@ -212,7 +185,6 @@ namespace BAS
             {
                 throw new NotImplementedException();
             }
-
         }
     }
 }

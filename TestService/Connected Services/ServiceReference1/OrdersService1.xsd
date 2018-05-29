@@ -4,7 +4,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DateOrder" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="DeliveriService" nillable="true" type="tns:DeliveriService" />
+      <xs:element minOccurs="0" name="DeliveryService" nillable="true" type="tns:DeliveriService" />
       <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="OrderCustomer" nillable="true" type="tns:Customer" />
       <xs:element minOccurs="0" name="OrderList" nillable="true" type="tns:ArrayOfOrderedProduct" />
