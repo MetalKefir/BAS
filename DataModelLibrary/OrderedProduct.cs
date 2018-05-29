@@ -10,14 +10,16 @@ namespace BAS
         [DataContract]
         public class OrderedProduct
         {
-            [DataMember] Product Product { get; set; }
-            [DataMember] int Quantity { get; set; }
+            [DataMember] public Product Product { get; set; }
+            [DataMember] public int Quantity { get; set; }
 
             public OrderedProduct(Product product, int quantity)
             {
                 this.Product = product;
                 this.Quantity = quantity;
             }
+
+            public OrderedProduct() { }
         }
     }
 }

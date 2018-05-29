@@ -13,52 +13,51 @@ namespace BAS
 {
     namespace ServicesBAS
     {
-        public sealed class ProductsService : BaseService<Product>, IProductsServiceContract
+        public sealed class CustomersService : BaseService<Customer>, ICustomersServiceContract
         {
-            protected override Func<SqlDataReader, Product> DataReaderConverter { get; set; }
+            protected override Func<SqlDataReader, Customer> DataReaderConverter { get; set; }
 
-            public ProductsService() : base(typeof(Product))
+            public CustomersService() : base(typeof(Customer))
             {
                 DataReaderConverter = (SqlDataReader reader) =>
                 {
-                    Product product = new Product
+                    Customer customer = new Customer
                     {
-                        Articulus = Convert.IsDBNull(reader["id"]) ? null : (int?)Convert.ToUInt32(reader["id"]),
-                        Name = Convert.ToString(reader["Name"]),
-                        Color = Convert.ToString(reader["Color"]),
-                        Manufacturer = Convert.ToString(reader["Manufacturer"]),
-                        Price = Convert.ToDecimal(reader["Price"]),
-                        Sale = Convert.IsDBNull(reader["Sale"]) ? null : (ushort?)Convert.ToUInt16(reader["Sale"]),
-                        Quantity = Convert.ToUInt32(reader["Quantity"]),
-                        Description = Convert.ToString(reader["Description"])
+                        Id = Convert.ToInt32(reader["id"]),
+                        Age = Convert.ToByte(reader["Age"]),
+                        FName = Convert.ToString(reader["FName"]),
+                        MName = Convert.ToString(reader["MName"]),
+                        LName = Convert.ToString(reader["LName"]),
+                        CustomerAddress = Convert.ToString(reader["Address"]),
+                        PhoneNumber = Convert.ToString(reader["PhoneNumber"]),
+                        Email = Convert.ToString(reader["Email"])
                     };
 
-                    return product;
+                    return customer;
                 };
             }
 
-            private static List<SqlParameter> GetProcParameters(Product product) => new List<SqlParameter>
+            private static List<SqlParameter> GetProcParameters(Customer customer) => new List<SqlParameter>
             {
-                new SqlParameter() { ParameterName = "@name", Value = product.Name},
-                new SqlParameter() { ParameterName = "@manufacturer", Value = product.Manufacturer},
-                new SqlParameter() { ParameterName = "@type", Value = product.Type},
-                new SqlParameter() { ParameterName = "@color", Value = product.Color},
-                new SqlParameter() { ParameterName = "@quantity", Value = product.Quantity, SqlDbType = SqlDbType.Int},
-                new SqlParameter() { ParameterName = "@price", Value = product.Price, SqlDbType = SqlDbType.Money},
-                new SqlParameter() { ParameterName = "@sale", Value = product.Sale,  SqlDbType = SqlDbType.TinyInt},
-                new SqlParameter() { ParameterName = "@description", Value = product.Description}
+                new SqlParameter() { ParameterName = "@age", Value = customer.Age, SqlDbType = SqlDbType.TinyInt},
+                new SqlParameter() { ParameterName = "@fName", Value = customer.FName},
+                new SqlParameter() { ParameterName = "@lName", Value = customer.LName},
+                new SqlParameter() { ParameterName = "@mName", Value = customer.MName},
+                new SqlParameter() { ParameterName = "@address", Value = customer.CustomerAddress},
+                new SqlParameter() { ParameterName = "@phoneNumber", Value = customer.PhoneNumber},
+                new SqlParameter() { ParameterName = "@email", Value = customer.Email}
             };
 
-            public (bool IsSuccessful, object messeage) Create(Product product)
+            public (bool IsSuccessful, object messeage) Create(Customer customer)
             {
                 (bool IsSuccessful, object messeage) result = (IsSuccessful: true, messeage: "");
 
-                if (product == null)
-                {
-                    result.IsSuccessful = false;
-                    result.messeage = "NullRef";
+                if (customer == null)
+                { 
+                result.IsSuccessful = false;
+                result.messeage = "NullRef";
 
-                    return result;
+                return result;
                 }
 
                 SqlCommand command = new SqlCommand(storedProcedure["create"])
@@ -66,7 +65,7 @@ namespace BAS
                     CommandType = CommandType.StoredProcedure
                 };
 
-                var sqlParam = GetProcParameters(product)?.ToArray();
+                var sqlParam = GetProcParameters(customer)?.ToArray();
                 if (sqlParam == null)
                 {
                     result.IsSuccessful = false;
@@ -85,11 +84,11 @@ namespace BAS
                 return result;
             }
 
-            public (bool IsSuccessful, string messeage) Delete(ICollection<Product> products)
+            public (bool IsSuccessful, string messeage) Delete(ICollection<Customer> customers)
             {
                 (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
 
-                if (products == null || products.Count == 0)
+                if (customers==null || customers.Count == 0)
                 {
                     result.IsSuccessful = false;
                     result.messeage = "List of Parameters empty";
@@ -100,9 +99,9 @@ namespace BAS
                 DataTable listOfDelete = new DataTable();
                 listOfDelete.Columns.Add("id", typeof(int));
 
-                foreach (var customer in products)
+                foreach (var customer in customers)
                 {
-                    listOfDelete.Rows.Add(customer.Articulus);
+                    listOfDelete.Rows.Add(customer.Id);
                 }
 
                 SqlCommand command = new SqlCommand(storedProcedure["delete"])
@@ -119,11 +118,11 @@ namespace BAS
                 return result;
             }
 
-            public (bool IsSuccessful, string messeage) Update(ICollection<Product> products)
+            public (bool IsSuccessful, string messeage) Update(ICollection<Customer> customers)
             {
                 (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
 
-                if (products == null || products.Count == 0)
+                if (customers == null || customers.Count == 0)
                 {
                     result.IsSuccessful = false;
                     result.messeage = "List of Parameters empty";
@@ -134,14 +133,14 @@ namespace BAS
                 List<SqlParameter[]> listSqlParameters = new List<SqlParameter[]>();
                 List<SqlCommand> listSqlCommands = new List<SqlCommand>();
 
-                foreach (var product in products)
+                foreach (var customer in customers)
                 {
-                    var sqlPrametrs = GetProcParameters(product);
-                    sqlPrametrs.Add(new SqlParameter() { ParameterName = "@prodid", Value = product.Articulus, SqlDbType = SqlDbType.Int, Direction = ParameterDirection.Input });
+                    var sqlPrametrs = GetProcParameters(customer);
+                    sqlPrametrs.Add(new SqlParameter() { ParameterName = "@cusid", Value = customer.Id, SqlDbType = SqlDbType.Int});
 
                     listSqlParameters.Add(sqlPrametrs?.ToArray());
                 }
-
+                
                 foreach (var sqlParameters in listSqlParameters)
                 {
                     listSqlCommands.Add(new SqlCommand()
@@ -159,29 +158,24 @@ namespace BAS
                 return result;
             }
 
-            public ICollection<Product> GetAll()
+            public ICollection<Customer> GetAll()
             {
-                ICollection<Product> products = new List<Product>();
+                ICollection<Customer> customers = new List<Customer>();
 
                 SqlCommand command = new SqlCommand(storedProcedure["getall"])
                 {
                     CommandType = CommandType.StoredProcedure
                 };
 
-                foreach (var product in RequestHelper.ReadQuery(command, DataReaderConverter))
+                foreach (var customer in RequestHelper.ReadQuery(command, DataReaderConverter))
                 {
-                    products.Add(product);
+                    customers.Add(customer);
                 }
 
-                return products;
+                return customers;
             }
 
-            public ICollection<Product> GetBy(string fieldName, object value)
-            {
-                throw new NotImplementedException();
-            }
-
-            public ICollection<Product> GetByPrice(int minprice, int? maxprice = null)
+            public ICollection<Customer> GetBy(string fieldName, object value)
             {
                 throw new NotImplementedException();
             }

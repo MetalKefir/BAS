@@ -18,6 +18,8 @@ namespace BAS
                 this.Status = status;
                 this.DateChange = date;
             }
+
+            public OrderStatus() { }
         }
     }
 }

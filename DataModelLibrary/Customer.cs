@@ -10,17 +10,19 @@ namespace BAS
         [DataContract]
         public class Customer
         {
+            [DataMember] public int? Id { get; set; }
             [DataMember] public string FName { get; set; }
             [DataMember] public string LName { get; set; }
             [DataMember] public string MName { get; set; }
             [DataMember] public ushort Age { get; set; }
             [DataMember] public string PhoneNumber { get; set; }
             [DataMember] public string Email { get; set; }
-            [DataMember] public Address CustomerAddress { get; set; }
+            [DataMember] public string CustomerAddress { get; set; }
 
-            public Customer(string fName, string lName, string mName,
-                ushort age, string phoneNumber, string email, Address customerAddress)
+            public Customer(int? id, string fName, string lName, string mName,
+                ushort age, string phoneNumber, string email, string customerAddress)
             {
+                Id = id;
                 FName = fName ?? throw new ArgumentNullException(nameof(fName));
                 LName = lName ?? throw new ArgumentNullException(nameof(lName));
                 MName = mName;
@@ -30,10 +32,7 @@ namespace BAS
                 CustomerAddress = customerAddress ?? throw new ArgumentNullException(nameof(customerAddress));
             }
 
-            public Customer()
-            {
-
-            }
+            public Customer() { }
 
             public override string ToString()
             {

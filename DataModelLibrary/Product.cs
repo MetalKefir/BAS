@@ -10,18 +10,18 @@ namespace BAS
         [DataContract]
         public class Product
         {
-            [DataMember] public int Articulus { get; set; }
+            [DataMember] public int? Articulus { get; set; }
             [DataMember] public string Name { get; set; }
             [DataMember] public string Manufacturer { get; set; }
             [DataMember] public string Type { get; set; }
             [DataMember] public string Color { get; set; }
-            [DataMember] public int Quantity { get; set; }
-            [DataMember] public int Price { get; set; }
+            [DataMember] public uint Quantity { get; set; }
+            [DataMember] public decimal Price { get; set; }
             [DataMember] public ushort? Sale { get; set; }
             [DataMember] public string Description { get; set; }
 
-            public Product(int articulus, string name, string manufacturer, string type,
-                string color, int quantity, int price, ushort? sale, string description)
+            public Product(int? articulus, string name, string manufacturer, string type,
+                string color, uint quantity, decimal price, ushort? sale, string description)
             {
                 Articulus = articulus;
                 Name = name ?? throw new ArgumentNullException(nameof(name));
@@ -33,6 +33,8 @@ namespace BAS
                 Sale = sale;
                 Description = description;
             }
+
+            public Product() { }
 
             public override string ToString()
             {
