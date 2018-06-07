@@ -3,25 +3,22 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace BAS
+namespace DataModelLibrary
 {
-    namespace DataModelLibrary
+    [DataContract]
+    public class Status
     {
-        [DataContract]
-        public class Status
+        [DataMember] public int Id { get; set; }
+        [DataMember] public string StatusName { get; set; }
+
+        public Status(string statusName) =>
+            StatusName = statusName ?? throw new ArgumentNullException(nameof(statusName));
+
+        public Status() { }
+
+        public override string ToString()
         {
-            [DataMember] public int Id { get; set; }
-            [DataMember] public string StatusName { get; set; }
-
-            public Status(string statusName) =>
-                StatusName = statusName ?? throw new ArgumentNullException(nameof(statusName));
-
-            public Status() { }
-
-            public override string ToString()
-            {
-                return base.ToString();
-            }
+            return base.ToString();
         }
     }
 }

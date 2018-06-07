@@ -4,35 +4,33 @@ using System.Linq;
 using System.Web;
 using System.Configuration;
 using System.Text;
-using BAS.ServiceContractLibrary;
-using BAS.DataModelLibrary;
+using ServiceContractLibrary;
+using DataModelLibrary;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace BAS
+namespace ServicesBAS
 {
-    namespace ServicesBAS
+    public abstract class BaseService<T> where T: class
     {
-        public abstract class BaseService<T> where T: class
+        protected readonly Dictionary<string, string> storedProcedure;
+        protected abstract Func<SqlDataReader, T> DataReaderConverter { get; set; }
+        protected ISqlRequestHelper<T> RequestHelper { get; set; }
+
+        public BaseService(Type entity)
         {
-            protected readonly Dictionary<string, string> storedProcedure;
-            protected abstract Func<SqlDataReader, T> DataReaderConverter { get; set; }
-            protected ISqlRequestHelper<T> RequestHelper { get; set; }
+            string entityName = new StringBuilder(entity.Name).Append("s").ToString();
 
-            public BaseService(Type entity)
+            storedProcedure = new Dictionary<string, string>
             {
-                string entityName = new StringBuilder(entity.Name).Append("s").ToString();
+                { "create", "insert" + entityName },
+                { "getall", "getall" + entityName },
+                { "getfromto", "getfromto" + entityName },
+                { "update", "Update" + entityName },
+                { "delete", "delete" + entityName }
+            };
 
-                storedProcedure = new Dictionary<string, string>
-                {
-                    { "create", "insert" + entityName },
-                    { "getall", "getall" + entityName },
-                    { "update", "Update" + entityName },
-                    { "delete", "delete" + entityName }
-                };
-
-                RequestHelper = new SqlRequestHelper<T>();
-            }
+            RequestHelper = new SqlRequestHelper<T>();
         }
     }
 }

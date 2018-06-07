@@ -7,85 +7,82 @@ using System.Web;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace BAS
+namespace ServicesBAS
 {
-    namespace ServicesBAS
+    public class SqlRequestHelper<T> : ISqlRequestHelper<T>
     {
-        public class SqlRequestHelper<T> : ISqlRequestHelper<T> where T : class
+        private int commandResult;
+        private readonly string connectionString;
+
+        public int CommandsResult
         {
-            private int commandResult;
-            private readonly string connectionString;
-
-            public int CommandsResult
+            get
             {
-                get
-                {
-                    return commandResult;
-                }
+                return commandResult;
             }
+        }
 
-            public SqlRequestHelper()
-            {
-                connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            }
+        public SqlRequestHelper()
+        {
+            connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        }
 
-            public void CUDQuery(List<SqlCommand> listSqlCommands, [CallerMemberName] string callerName = null)
+        public void CUDQuery(List<SqlCommand> listSqlCommands, [CallerMemberName] string callerName = null)
+        {
+            using (var connection = new SqlConnection(connectionString))
             {
-                using (var connection = new SqlConnection(connectionString))
+                connection.Open();
+
+                foreach (var command in listSqlCommands)
                 {
-                    connection.Open();
-
-                    foreach (var command in listSqlCommands)
-                    {
-                        command.Connection = connection;
-
-                        command.ExecuteNonQuery();
-
-                        commandResult++;
-                    }
-                }
-            }
-
-            public void CUDQuery(SqlCommand sqlCommand, [CallerMemberName] string callerName = null)
-            {
-                using (var connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    sqlCommand.Connection = connection;
-
-                    commandResult = sqlCommand.ExecuteNonQuery();
-
-                    if (callerName == "Create")
-                        commandResult = (int)sqlCommand.Parameters["@Id"].Value;
-                }
-            }
-
-            public IEnumerable<T> ReadQuery(SqlCommand command, Func<SqlDataReader, T> DataReaderConverter, [CallerMemberName] string callerName = null)
-            {
-                SqlDataReader reader = null;
-
-                using (var connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-
                     command.Connection = connection;
 
-                    reader = command.ExecuteReader();
+                    command.ExecuteNonQuery();
 
-                    if (reader.HasRows)
+                    commandResult++;
+                }
+            }
+        }
+
+        public void CUDQuery(SqlCommand sqlCommand, [CallerMemberName] string callerName = null)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                sqlCommand.Connection = connection;
+
+                commandResult = sqlCommand.ExecuteNonQuery();
+
+                if (callerName == "Create")
+                    commandResult = (int)sqlCommand.Parameters["@Id"].Value;
+            }
+        }
+
+        public IEnumerable<T> ReadQuery(SqlCommand command, Func<SqlDataReader, T> DataReaderConverter, [CallerMemberName] string callerName = null)
+        {
+            SqlDataReader reader = null;
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                command.Connection = connection;
+
+                reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            T newRecord = DataReaderConverter(reader);
+                        T newRecord = DataReaderConverter(reader);
 
-                            yield return newRecord;
-                        }
+                        yield return newRecord;
                     }
                 }
-
-                reader.Close();
             }
+
+            reader.Close();
         }
     }
 }

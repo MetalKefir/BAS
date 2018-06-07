@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
-using BAS.DataModelLibrary;
+using DataModelLibrary;
 
-namespace BAS
+namespace ServiceContractLibrary
 {
-    namespace ServiceContractLibrary
-    {
-        [ServiceContract(Namespace = "BAS.ServiceModel", Name = "CustomersService")]
-        public interface ICustomersServiceContract : IBaseServiceContract<Customer> { }
-    }
+    [ServiceContract(Namespace = "ServiceModel", Name = "CustomersService")]
+    public interface ICustomersServiceContract : IBaseServiceContract<Customer> { }
 }

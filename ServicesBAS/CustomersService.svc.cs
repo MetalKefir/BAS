@@ -4,181 +4,199 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
-using BAS.ServiceContractLibrary;
-using BAS.DataModelLibrary;
+using ServiceContractLibrary;
+using DataModelLibrary;
 using System.Data.SqlClient;
 using System.Data;
+using System.Collections;
 
-namespace BAS
+namespace ServicesBAS
 {
-    namespace ServicesBAS
+    public sealed class CustomersService: BaseService<Customer>, ICustomersServiceContract
     {
-        public sealed class CustomersService : BaseService<Customer>, ICustomersServiceContract
+        protected override Func<SqlDataReader, Customer> DataReaderConverter { get; set; }
+
+        public CustomersService() : base(typeof(Customer))
         {
-            protected override Func<SqlDataReader, Customer> DataReaderConverter { get; set; }
-
-            public CustomersService() : base(typeof(Customer))
+            DataReaderConverter = (SqlDataReader reader) =>
             {
-                DataReaderConverter = (SqlDataReader reader) =>
+                Customer customer = new Customer
                 {
-                    Customer customer = new Customer
-                    {
-                        Id = Convert.ToInt32(reader["id"]),
-                        Age = Convert.ToByte(reader["Age"]),
-                        FName = Convert.ToString(reader["FName"]),
-                        MName = Convert.ToString(reader["MName"]),
-                        LName = Convert.ToString(reader["LName"]),
-                        CustomerAddress = Convert.ToString(reader["Address"]),
-                        PhoneNumber = Convert.ToString(reader["PhoneNumber"]),
-                        Email = Convert.ToString(reader["Email"])
-                    };
-
-                    return customer;
+                    Id = Convert.ToInt32(reader["id"]),
+                    Age = Convert.ToByte(reader["Age"]),
+                    FName = Convert.ToString(reader["FName"]),
+                    MName = Convert.ToString(reader["MName"]),
+                    LName = Convert.ToString(reader["LName"]),
+                    CustomerAddress = Convert.ToString(reader["Address"]),
+                    PhoneNumber = Convert.ToString(reader["PhoneNumber"]),
+                    Email = Convert.ToString(reader["Email"])
                 };
+
+                return customer;
+            };
+        }
+
+        private static List<SqlParameter> GetProcParameters(Customer customer) => new List<SqlParameter>
+        {
+            new SqlParameter() { ParameterName = "@age", Value = customer.Age, SqlDbType = SqlDbType.TinyInt},
+            new SqlParameter() { ParameterName = "@fName", Value = customer.FName},
+            new SqlParameter() { ParameterName = "@lName", Value = customer.LName},
+            new SqlParameter() { ParameterName = "@mName", Value = customer.MName},
+            new SqlParameter() { ParameterName = "@address", Value = customer.CustomerAddress},
+            new SqlParameter() { ParameterName = "@phoneNumber", Value = customer.PhoneNumber},
+            new SqlParameter() { ParameterName = "@email", Value = customer.Email}
+        };
+
+        public (bool IsSuccessful, object messeage) Create(Customer customer)
+        {
+            (bool IsSuccessful, object messeage) result = (IsSuccessful: true, messeage: "");
+
+            if (customer == null)
+            { 
+            result.IsSuccessful = false;
+            result.messeage = "NullRef";
+
+            return result;
             }
 
-            private static List<SqlParameter> GetProcParameters(Customer customer) => new List<SqlParameter>
+            SqlCommand command = new SqlCommand(storedProcedure["create"])
             {
-                new SqlParameter() { ParameterName = "@age", Value = customer.Age, SqlDbType = SqlDbType.TinyInt},
-                new SqlParameter() { ParameterName = "@fName", Value = customer.FName},
-                new SqlParameter() { ParameterName = "@lName", Value = customer.LName},
-                new SqlParameter() { ParameterName = "@mName", Value = customer.MName},
-                new SqlParameter() { ParameterName = "@address", Value = customer.CustomerAddress},
-                new SqlParameter() { ParameterName = "@phoneNumber", Value = customer.PhoneNumber},
-                new SqlParameter() { ParameterName = "@email", Value = customer.Email}
+                CommandType = CommandType.StoredProcedure
             };
 
-            public (bool IsSuccessful, object messeage) Create(Customer customer)
+            var sqlParam = GetProcParameters(customer)?.ToArray();
+            if (sqlParam == null)
             {
-                (bool IsSuccessful, object messeage) result = (IsSuccessful: true, messeage: "");
-
-                if (customer == null)
-                { 
                 result.IsSuccessful = false;
-                result.messeage = "NullRef";
-
+                result.messeage = "Failure";
                 return result;
-                }
+            }
+            else
+                command.Parameters.AddRange(sqlParam);
 
-                SqlCommand command = new SqlCommand(storedProcedure["create"])
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
+            command.Parameters.Add("@Id", SqlDbType.Int);
+            command.Parameters["@Id"].Direction = ParameterDirection.Output;
 
-                var sqlParam = GetProcParameters(customer)?.ToArray();
-                if (sqlParam == null)
-                {
-                    result.IsSuccessful = false;
-                    result.messeage = "Failure";
-                    return result;
-                }
-                else
-                    command.Parameters.AddRange(sqlParam);
+            RequestHelper.CUDQuery(command);
+            result.messeage = RequestHelper.CommandsResult;
 
-                command.Parameters.Add("@Id", SqlDbType.Int);
-                command.Parameters["@Id"].Direction = ParameterDirection.Output;
+            return result;
+        }
 
-                RequestHelper.CUDQuery(command);
-                result.messeage = RequestHelper.CommandsResult;
+        public (bool IsSuccessful, string messeage) Delete(ICollection<Customer> customers)
+        {
+            (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
+
+            if (customers==null || customers.Count == 0)
+            {
+                result.IsSuccessful = false;
+                result.messeage = "List of Parameters empty";
 
                 return result;
             }
 
-            public (bool IsSuccessful, string messeage) Delete(ICollection<Customer> customers)
+            DataTable listOfDelete = new DataTable();
+            listOfDelete.Columns.Add("id", typeof(int));
+
+            foreach (var customer in customers)
+                listOfDelete.Rows.Add(customer.Id);
+            
+
+            SqlCommand command = new SqlCommand(storedProcedure["delete"])
             {
-                (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
+                CommandType = CommandType.StoredProcedure
+            };
+            command.Parameters.Add("@ids", SqlDbType.Structured);
+            command.Parameters["@ids"].TypeName = "intTable";
+            command.Parameters["@ids"].Value = listOfDelete;
 
-                if (customers==null || customers.Count == 0)
-                {
-                    result.IsSuccessful = false;
-                    result.messeage = "List of Parameters empty";
+            RequestHelper.CUDQuery(command);
+            result.messeage = "Delete " + RequestHelper.CommandsResult + " obj";
 
-                    return result;
-                }
+            return result;
+        }
 
-                DataTable listOfDelete = new DataTable();
-                listOfDelete.Columns.Add("id", typeof(int));
+        public (bool IsSuccessful, string messeage) Update(ICollection<Customer> customers)
+        {
+            (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
 
-                foreach (var customer in customers)
-                {
-                    listOfDelete.Rows.Add(customer.Id);
-                }
-
-                SqlCommand command = new SqlCommand(storedProcedure["delete"])
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-                command.Parameters.Add("@ids", SqlDbType.Structured);
-                command.Parameters["@ids"].TypeName = "intTable";
-                command.Parameters["@ids"].Value = listOfDelete;
-
-                RequestHelper.CUDQuery(command);
-                result.messeage = "Delete " + RequestHelper.CommandsResult + " obj";
+            if (customers == null || customers.Count == 0)
+            {
+                result.IsSuccessful = false;
+                result.messeage = "List of Parameters empty";
 
                 return result;
             }
 
-            public (bool IsSuccessful, string messeage) Update(ICollection<Customer> customers)
+            List<SqlParameter[]> listSqlParameters = new List<SqlParameter[]>();
+            List<SqlCommand> listSqlCommands = new List<SqlCommand>();
+
+            foreach (var customer in customers)
             {
-                (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
+                var sqlPrametrs = GetProcParameters(customer);
+                sqlPrametrs.Add(new SqlParameter() { ParameterName = "@cusid", Value = customer.Id, SqlDbType = SqlDbType.Int});
 
-                if (customers == null || customers.Count == 0)
-                {
-                    result.IsSuccessful = false;
-                    result.messeage = "List of Parameters empty";
-
-                    return result;
-                }
-
-                List<SqlParameter[]> listSqlParameters = new List<SqlParameter[]>();
-                List<SqlCommand> listSqlCommands = new List<SqlCommand>();
-
-                foreach (var customer in customers)
-                {
-                    var sqlPrametrs = GetProcParameters(customer);
-                    sqlPrametrs.Add(new SqlParameter() { ParameterName = "@cusid", Value = customer.Id, SqlDbType = SqlDbType.Int});
-
-                    listSqlParameters.Add(sqlPrametrs?.ToArray());
-                }
+                listSqlParameters.Add(sqlPrametrs?.ToArray());
+            }
                 
-                foreach (var sqlParameters in listSqlParameters)
-                {
-                    listSqlCommands.Add(new SqlCommand()
-                    {
-                        CommandText = storedProcedure["update"],
-                        CommandType = CommandType.StoredProcedure,
-                    });
-
-                    listSqlCommands[listSqlCommands.Count - 1].Parameters.AddRange(sqlParameters);
-                }
-
-                RequestHelper.CUDQuery(listSqlCommands);
-                result.messeage = "Update " + RequestHelper.CommandsResult + " obj";
-
-                return result;
-            }
-
-            public ICollection<Customer> GetAll()
+            foreach (var sqlParameters in listSqlParameters)
             {
-                ICollection<Customer> customers = new List<Customer>();
-
-                SqlCommand command = new SqlCommand(storedProcedure["getall"])
+                listSqlCommands.Add(new SqlCommand()
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
+                    CommandText = storedProcedure["update"],
+                    CommandType = CommandType.StoredProcedure,
+                });
 
-                foreach (var customer in RequestHelper.ReadQuery(command, DataReaderConverter))
-                {
-                    customers.Add(customer);
-                }
-
-                return customers;
+                listSqlCommands[listSqlCommands.Count - 1].Parameters.AddRange(sqlParameters);
             }
 
-            public ICollection<Customer> GetBy(string fieldName, object value)
+            RequestHelper.CUDQuery(listSqlCommands);
+            result.messeage = "Update " + RequestHelper.CommandsResult + " obj";
+
+            return result;
+        }
+
+        public ICollection<Customer> GetAll()
+        {
+            ICollection<Customer> customers = new List<Customer>();
+
+            SqlCommand command = new SqlCommand(storedProcedure["getall"])
             {
-                throw new NotImplementedException();
+                CommandType = CommandType.StoredProcedure
+            };
+
+            foreach (var customer in RequestHelper.ReadQuery(command, DataReaderConverter))
+            {
+                customers.Add(customer);
             }
+
+            return customers;
+        }
+
+        public ICollection<Customer> GetFromTo(uint from, uint to)
+        {
+            ICollection<Customer> customers = new List<Customer>();
+
+            SqlCommand command = new SqlCommand(storedProcedure["getfromto"])
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            command.Parameters.Add(new SqlParameter() { ParameterName = "@from", Value = from, SqlDbType = SqlDbType.Int });
+            command.Parameters.Add(new SqlParameter() { ParameterName = "@to", Value = to, SqlDbType = SqlDbType.Int });
+
+            foreach (var customer in RequestHelper.ReadQuery(command, DataReaderConverter))
+            {
+                customers.Add(customer);
+            }
+
+            return customers;
+        }
+
+        public ICollection<Customer> GetBy(string fieldName, object value)
+        {
+
+            throw new NotImplementedException();
         }
     }
 }

@@ -6,13 +6,12 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModelLibrary", "DataModelLibrary\DataModelLibrary.csproj", "{260F0350-2240-4313-923F-1D8C0180A107}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestService", "TestService\TestService.csproj", "{AFCC3376-5581-46BF-BFD8-BAFA2AF4D0CE}"
-	ProjectSection(ProjectDependencies) = postProject
-		{6EF200DA-C8F0-4906-B090-B96B965D21DE} = {6EF200DA-C8F0-4906-B090-B96B965D21DE}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceContractLibrary", "ServiceContractLibrary\ServiceContractLibrary.csproj", "{A710494A-69FC-48B4-9F0C-0B2B05B80C41}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesBAS", "ServicesBAS\ServicesBAS.csproj", "{6EF200DA-C8F0-4906-B090-B96B965D21DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BAS", "BAS\BAS.csproj", "{13362653-BD92-4150-9868-20829CB530AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +89,26 @@ Global
 		{6EF200DA-C8F0-4906-B090-B96B965D21DE}.Release|x64.Build.0 = Release|Any CPU
 		{6EF200DA-C8F0-4906-B090-B96B965D21DE}.Release|x86.ActiveCfg = Release|Any CPU
 		{6EF200DA-C8F0-4906-B090-B96B965D21DE}.Release|x86.Build.0 = Release|Any CPU
+		{13362653-BD92-4150-9868-20829CB530AD}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{13362653-BD92-4150-9868-20829CB530AD}.Debug|ARM.ActiveCfg = Debug|ARM
+		{13362653-BD92-4150-9868-20829CB530AD}.Debug|ARM.Build.0 = Debug|ARM
+		{13362653-BD92-4150-9868-20829CB530AD}.Debug|ARM.Deploy.0 = Debug|ARM
+		{13362653-BD92-4150-9868-20829CB530AD}.Debug|x64.ActiveCfg = Debug|x64
+		{13362653-BD92-4150-9868-20829CB530AD}.Debug|x64.Build.0 = Debug|x64
+		{13362653-BD92-4150-9868-20829CB530AD}.Debug|x64.Deploy.0 = Debug|x64
+		{13362653-BD92-4150-9868-20829CB530AD}.Debug|x86.ActiveCfg = Debug|x86
+		{13362653-BD92-4150-9868-20829CB530AD}.Debug|x86.Build.0 = Debug|x86
+		{13362653-BD92-4150-9868-20829CB530AD}.Debug|x86.Deploy.0 = Debug|x86
+		{13362653-BD92-4150-9868-20829CB530AD}.Release|Any CPU.ActiveCfg = Release|x86
+		{13362653-BD92-4150-9868-20829CB530AD}.Release|ARM.ActiveCfg = Release|ARM
+		{13362653-BD92-4150-9868-20829CB530AD}.Release|ARM.Build.0 = Release|ARM
+		{13362653-BD92-4150-9868-20829CB530AD}.Release|ARM.Deploy.0 = Release|ARM
+		{13362653-BD92-4150-9868-20829CB530AD}.Release|x64.ActiveCfg = Release|x64
+		{13362653-BD92-4150-9868-20829CB530AD}.Release|x64.Build.0 = Release|x64
+		{13362653-BD92-4150-9868-20829CB530AD}.Release|x64.Deploy.0 = Release|x64
+		{13362653-BD92-4150-9868-20829CB530AD}.Release|x86.ActiveCfg = Release|x86
+		{13362653-BD92-4150-9868-20829CB530AD}.Release|x86.Build.0 = Release|x86
+		{13362653-BD92-4150-9868-20829CB530AD}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

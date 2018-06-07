@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="BAS.ServiceModel" elementFormDefault="qualified" targetNamespace="BAS.ServiceModel" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost/ServicesBAS/ProductsService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" />
+<xs:schema xmlns:tns="ServiceModel" elementFormDefault="qualified" targetNamespace="ServiceModel" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost/ServicesBAS/ProductsService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataModelLibrary" />
   <xs:import schemaLocation="http://localhost/ServicesBAS/ProductsService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/System" />
+  <xs:import schemaLocation="http://localhost/ServicesBAS/ProductsService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:element name="Create">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="Parameter" nillable="true" type="q1:Product" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DataModelLibrary" minOccurs="0" name="parameter" nillable="true" type="q1:Product" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -19,7 +20,7 @@
   <xs:element name="Update">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="Parameters" nillable="true" type="q3:ArrayOfProduct" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DataModelLibrary" minOccurs="0" name="parameters" nillable="true" type="q3:ArrayOfProduct" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -33,7 +34,7 @@
   <xs:element name="Delete">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="Parameters" nillable="true" type="q5:ArrayOfProduct" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DataModelLibrary" minOccurs="0" name="parameters" nillable="true" type="q5:ArrayOfProduct" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -52,7 +53,22 @@
   <xs:element name="GetAllResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="GetAllResult" nillable="true" type="q7:ArrayOfProduct" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DataModelLibrary" minOccurs="0" name="GetAllResult" nillable="true" type="q7:ArrayOfProduct" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFromTo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="from" type="xs:unsignedInt" />
+        <xs:element minOccurs="0" name="to" type="xs:unsignedInt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetFromToResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DataModelLibrary" minOccurs="0" name="GetFromToResult" nillable="true" type="q8:ArrayOfProduct" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -60,14 +76,14 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="fieldName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="Parameter" nillable="true" type="xs:anyType" />
+        <xs:element minOccurs="0" name="value" nillable="true" type="xs:anyType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GetByResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="GetByResult" nillable="true" type="q8:ArrayOfProduct" />
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DataModelLibrary" minOccurs="0" name="GetByResult" nillable="true" type="q9:ArrayOfProduct" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -82,7 +98,21 @@
   <xs:element name="GetByPriceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/BAS.DataModelLibrary" minOccurs="0" name="GetByPriceResult" nillable="true" type="q9:ArrayOfProduct" />
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DataModelLibrary" minOccurs="0" name="GetByPriceResult" nillable="true" type="q10:ArrayOfProduct" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetById">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ids" nillable="true" type="q11:ArrayOfint" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetByIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DataModelLibrary" minOccurs="0" name="GetByIdResult" nillable="true" type="q12:ArrayOfProduct" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

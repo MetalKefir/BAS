@@ -4,187 +4,305 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
-using BAS.ServiceContractLibrary;
-using BAS.DataModelLibrary;
+using ServiceContractLibrary;
+using DataModelLibrary;
 using System.Data.SqlClient;
 using System.Data;
+using System.Collections;
 
-namespace BAS
+namespace ServicesBAS
 {
-    namespace ServicesBAS
+    public sealed class ProductsService : BaseService<Product>, IProductsServiceContract
     {
-        public sealed class ProductsService : BaseService<Product>, IProductsServiceContract
+        protected override Func<SqlDataReader, Product> DataReaderConverter { get; set; }
+
+        public ProductsService() : base(typeof(Product))
         {
-            protected override Func<SqlDataReader, Product> DataReaderConverter { get; set; }
-
-            public ProductsService() : base(typeof(Product))
+            DataReaderConverter = (SqlDataReader reader) =>
             {
-                DataReaderConverter = (SqlDataReader reader) =>
+                Product product = new Product
                 {
-                    Product product = new Product
-                    {
-                        Articulus = Convert.IsDBNull(reader["id"]) ? null : (int?)Convert.ToUInt32(reader["id"]),
-                        Name = Convert.ToString(reader["Name"]),
-                        Color = Convert.ToString(reader["Color"]),
-                        Manufacturer = Convert.ToString(reader["Manufacturer"]),
-                        Price = Convert.ToDecimal(reader["Price"]),
-                        Sale = Convert.IsDBNull(reader["Sale"]) ? null : (ushort?)Convert.ToUInt16(reader["Sale"]),
-                        Quantity = Convert.ToUInt32(reader["Quantity"]),
-                        Description = Convert.ToString(reader["Description"])
-                    };
-
-                    return product;
+                    Articulus = Convert.IsDBNull(reader["id"]) ? null : (int?)Convert.ToUInt32(reader["id"]),
+                    Name = Convert.ToString(reader["Name"]),
+                    Color = Convert.ToString(reader["Color"]),
+                    Manufacturer = Convert.ToString(reader["Manufacturer"]),
+                    Type = Convert.ToString(reader["Type"]),
+                    Price = Convert.ToDecimal(reader["Price"]),
+                    Sale = Convert.IsDBNull(reader["Sale"]) ? null : (ushort?)Convert.ToUInt16(reader["Sale"]),
+                    Quantity = Convert.ToUInt32(reader["Quantity"]),
+                    Description = Convert.ToString(reader["Description"])
                 };
+
+                return product;
+            };
+        }
+
+        private static List<SqlParameter> GetProcParameters(Product product) => new List<SqlParameter>
+        {
+            new SqlParameter() { ParameterName = "@name", Value = product.Name},
+            new SqlParameter() { ParameterName = "@manufacturer", Value = product.Manufacturer},
+            new SqlParameter() { ParameterName = "@type", Value = product.Type},
+            new SqlParameter() { ParameterName = "@color", Value = product.Color},
+            new SqlParameter() { ParameterName = "@quantity", Value = product.Quantity, SqlDbType = SqlDbType.Int},
+            new SqlParameter() { ParameterName = "@price", Value = product.Price, SqlDbType = SqlDbType.Money},
+            new SqlParameter() { ParameterName = "@sale", Value = product.Sale,  SqlDbType = SqlDbType.TinyInt},
+            new SqlParameter() { ParameterName = "@description", Value = product.Description}
+        };
+
+        public (bool IsSuccessful, object messeage) Create(Product product)
+        {
+            (bool IsSuccessful, object messeage) result = (IsSuccessful: true, messeage: "");
+
+            if (product == null)
+            {
+                result.IsSuccessful = false;
+                result.messeage = "NullRef";
+
+                return result;
             }
 
-            private static List<SqlParameter> GetProcParameters(Product product) => new List<SqlParameter>
+            SqlCommand command = new SqlCommand(storedProcedure["create"])
             {
-                new SqlParameter() { ParameterName = "@name", Value = product.Name},
-                new SqlParameter() { ParameterName = "@manufacturer", Value = product.Manufacturer},
-                new SqlParameter() { ParameterName = "@type", Value = product.Type},
-                new SqlParameter() { ParameterName = "@color", Value = product.Color},
-                new SqlParameter() { ParameterName = "@quantity", Value = product.Quantity, SqlDbType = SqlDbType.Int},
-                new SqlParameter() { ParameterName = "@price", Value = product.Price, SqlDbType = SqlDbType.Money},
-                new SqlParameter() { ParameterName = "@sale", Value = product.Sale,  SqlDbType = SqlDbType.TinyInt},
-                new SqlParameter() { ParameterName = "@description", Value = product.Description}
+                CommandType = CommandType.StoredProcedure
             };
 
-            public (bool IsSuccessful, object messeage) Create(Product product)
+            var sqlParam = GetProcParameters(product)?.ToArray();
+            if (sqlParam == null)
             {
-                (bool IsSuccessful, object messeage) result = (IsSuccessful: true, messeage: "");
+                result.IsSuccessful = false;
+                result.messeage = "Failure";
+                return result;
+            }
+            else
+                command.Parameters.AddRange(sqlParam);
 
-                if (product == null)
-                {
-                    result.IsSuccessful = false;
-                    result.messeage = "NullRef";
+            command.Parameters.Add("@Id", SqlDbType.Int);
+            command.Parameters["@Id"].Direction = ParameterDirection.Output;
 
-                    return result;
-                }
+            RequestHelper.CUDQuery(command);
+            result.messeage = RequestHelper.CommandsResult;
 
-                SqlCommand command = new SqlCommand(storedProcedure["create"])
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
+            return result;
+        }
 
-                var sqlParam = GetProcParameters(product)?.ToArray();
-                if (sqlParam == null)
-                {
-                    result.IsSuccessful = false;
-                    result.messeage = "Failure";
-                    return result;
-                }
-                else
-                    command.Parameters.AddRange(sqlParam);
+        public (bool IsSuccessful, string messeage) Delete(ICollection<Product> products)
+        {
+            (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
 
-                command.Parameters.Add("@Id", SqlDbType.Int);
-                command.Parameters["@Id"].Direction = ParameterDirection.Output;
-
-                RequestHelper.CUDQuery(command);
-                result.messeage = RequestHelper.CommandsResult;
+            if (products == null || products.Count == 0)
+            {
+                result.IsSuccessful = false;
+                result.messeage = "List of Parameters empty";
 
                 return result;
             }
 
-            public (bool IsSuccessful, string messeage) Delete(ICollection<Product> products)
+            DataTable listOfDelete = new DataTable();
+            listOfDelete.Columns.Add("id", typeof(int));
+
+            foreach (var product in products)
             {
-                (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
+                listOfDelete.Rows.Add(product.Articulus);
+            }
 
-                if (products == null || products.Count == 0)
-                {
-                    result.IsSuccessful = false;
-                    result.messeage = "List of Parameters empty";
+            SqlCommand command = new SqlCommand(storedProcedure["delete"])
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            command.Parameters.Add("@ids", SqlDbType.Structured);
+            command.Parameters["@ids"].TypeName = "intTable";
+            command.Parameters["@ids"].Value = listOfDelete;
 
-                    return result;
-                }
+            RequestHelper.CUDQuery(command);
+            result.messeage = "Delete " + RequestHelper.CommandsResult + " obj";
 
-                DataTable listOfDelete = new DataTable();
-                listOfDelete.Columns.Add("id", typeof(int));
+            return result;
+        }
 
-                foreach (var customer in products)
-                {
-                    listOfDelete.Rows.Add(customer.Articulus);
-                }
+        public (bool IsSuccessful, string messeage) Update(ICollection<Product> products)
+        {
+            (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
 
-                SqlCommand command = new SqlCommand(storedProcedure["delete"])
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-                command.Parameters.Add("@ids", SqlDbType.Structured);
-                command.Parameters["@ids"].TypeName = "intTable";
-                command.Parameters["@ids"].Value = listOfDelete;
-
-                RequestHelper.CUDQuery(command);
-                result.messeage = "Delete " + RequestHelper.CommandsResult + " obj";
+            if (products == null || products.Count == 0)
+            {
+                result.IsSuccessful = false;
+                result.messeage = "List of Parameters empty";
 
                 return result;
             }
 
-            public (bool IsSuccessful, string messeage) Update(ICollection<Product> products)
+            List<SqlParameter[]> listSqlParameters = new List<SqlParameter[]>();
+            List<SqlCommand> listSqlCommands = new List<SqlCommand>();
+
+            foreach (var product in products)
             {
-                (bool IsSuccessful, string messeage) result = (IsSuccessful: true, messeage: "");
+                var sqlPrametrs = GetProcParameters(product);
+                sqlPrametrs.Add(new SqlParameter() { ParameterName = "@prodid", Value = product.Articulus, SqlDbType = SqlDbType.Int, Direction = ParameterDirection.Input });
 
-                if (products == null || products.Count == 0)
-                {
-                    result.IsSuccessful = false;
-                    result.messeage = "List of Parameters empty";
-
-                    return result;
-                }
-
-                List<SqlParameter[]> listSqlParameters = new List<SqlParameter[]>();
-                List<SqlCommand> listSqlCommands = new List<SqlCommand>();
-
-                foreach (var product in products)
-                {
-                    var sqlPrametrs = GetProcParameters(product);
-                    sqlPrametrs.Add(new SqlParameter() { ParameterName = "@prodid", Value = product.Articulus, SqlDbType = SqlDbType.Int, Direction = ParameterDirection.Input });
-
-                    listSqlParameters.Add(sqlPrametrs?.ToArray());
-                }
-
-                foreach (var sqlParameters in listSqlParameters)
-                {
-                    listSqlCommands.Add(new SqlCommand()
-                    {
-                        CommandText = storedProcedure["update"],
-                        CommandType = CommandType.StoredProcedure,
-                    });
-
-                    listSqlCommands[listSqlCommands.Count - 1].Parameters.AddRange(sqlParameters);
-                }
-
-                RequestHelper.CUDQuery(listSqlCommands);
-                result.messeage = "Update " + RequestHelper.CommandsResult + " obj";
-
-                return result;
+                listSqlParameters.Add(sqlPrametrs?.ToArray());
             }
 
-            public ICollection<Product> GetAll()
+            foreach (var sqlParameters in listSqlParameters)
             {
-                ICollection<Product> products = new List<Product>();
-
-                SqlCommand command = new SqlCommand(storedProcedure["getall"])
+                listSqlCommands.Add(new SqlCommand()
                 {
-                    CommandType = CommandType.StoredProcedure
-                };
+                    CommandText = storedProcedure["update"],
+                    CommandType = CommandType.StoredProcedure,
+                });
 
-                foreach (var product in RequestHelper.ReadQuery(command, DataReaderConverter))
-                {
-                    products.Add(product);
-                }
-
-                return products;
+                listSqlCommands[listSqlCommands.Count - 1].Parameters.AddRange(sqlParameters);
             }
 
-            public ICollection<Product> GetBy(string fieldName, object value)
+            RequestHelper.CUDQuery(listSqlCommands);
+            result.messeage = "Update " + RequestHelper.CommandsResult + " obj";
+
+            return result;
+        }
+
+        public ICollection<Product> GetAll()
+        {
+            ICollection<Product> products = new List<Product>();
+
+            SqlCommand command = new SqlCommand(storedProcedure["getall"])
             {
-                throw new NotImplementedException();
+                CommandType = CommandType.StoredProcedure
+            };
+
+            foreach (var product in RequestHelper.ReadQuery(command, DataReaderConverter))
+            {
+                products.Add(product);
             }
 
-            public ICollection<Product> GetByPrice(int minprice, int? maxprice = null)
+            return products;
+        }
+
+        public ICollection<Product> GetFromTo(uint from, uint to)
+        {
+            ICollection<Product> products = new List<Product>();
+
+            SqlCommand command = new SqlCommand(storedProcedure["getfromto"])
             {
-                throw new NotImplementedException();
+                CommandType = CommandType.StoredProcedure
+            };
+
+            command.Parameters.Add(new SqlParameter() { ParameterName = "@from", Value = from, SqlDbType = SqlDbType.Int });
+            command.Parameters.Add(new SqlParameter() { ParameterName = "@to", Value = to, SqlDbType = SqlDbType.Int });
+
+            foreach (var product in RequestHelper.ReadQuery(command, DataReaderConverter))
+            {
+                products.Add(product);
             }
+
+            return products;
+        }
+
+        public ICollection<Product> GetBy(string fieldName, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICollection<Product> GetById(ICollection<int> ids)
+        {
+            SqlCommand command = new SqlCommand("GetProductById")
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            DataTable listOfParams = new DataTable();
+            listOfParams.Columns.Add("Id", typeof(int));
+
+            foreach (var id in ids)
+                listOfParams.Rows.Add(id);
+ 
+            command.Parameters.Add("@productid", SqlDbType.Structured);
+            command.Parameters["@productid"].TypeName = "intTable";
+            command.Parameters["@productid"].Value = listOfParams;
+
+            ICollection<Product> products = new List<Product>();
+
+            foreach (var product in RequestHelper.ReadQuery(command, DataReaderConverter))
+            {
+                products.Add(product);
+            }
+
+            return products;
+        }
+
+        public ICollection<Product> GetByPrice(int minprice, int? maxprice = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICollection<string> GetAllType()
+        {
+            ICollection<string> types = new List<string>();
+
+            SqlCommand command = new SqlCommand("GetAllTypes")
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            SqlRequestHelper<string> requestHelper = new SqlRequestHelper<string>();
+
+            Func<SqlDataReader, string> DataConvert = (SqlDataReader reader) =>
+            {
+                return Convert.ToString(reader["TypeName"]);
+            };
+
+            foreach (var type in requestHelper.ReadQuery(command, DataConvert))
+            {
+                types.Add(type);
+            }
+
+            return types;
+        }
+
+        public ICollection<string> GetAllManufacturer()
+        {
+            ICollection<string> manufacturers = new List<string>();
+
+            SqlCommand command = new SqlCommand("GetAllManufacturers")
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            SqlRequestHelper<string> requestHelper = new SqlRequestHelper<string>();
+
+            Func<SqlDataReader, string> DataConvert = (SqlDataReader reader) =>
+            {
+                return Convert.ToString(reader["ManufacturerName"]);
+            };
+
+            foreach (var manufacturer in requestHelper.ReadQuery(command, DataConvert))
+            {
+                manufacturers.Add(manufacturer);
+            }
+
+            return manufacturers;
+        }
+
+        public ICollection<string> GetAllColor()
+        {
+            ICollection<string> colors = new List<string>();
+
+            SqlCommand command = new SqlCommand("GetAllColors")
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            SqlRequestHelper<string> requestHelper = new SqlRequestHelper<string>();
+
+            Func<SqlDataReader, string> DataConvert = (SqlDataReader reader) =>
+            {
+                return Convert.ToString(reader["ColorName"]);
+            };
+
+            foreach (var color in requestHelper.ReadQuery(command, DataConvert))
+            {
+                colors.Add(color);
+            }
+
+            return colors;
         }
     }
 }

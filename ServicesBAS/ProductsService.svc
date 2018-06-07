@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="BAS.ServicesBAS.ProductsService"%>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="ServicesBAS.ProductsService"%>

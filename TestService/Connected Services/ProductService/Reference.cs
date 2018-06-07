@@ -12,51 +12,65 @@ namespace TestService.ProductService {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="BAS.ServiceModel", ConfigurationName="ProductService.ProductsService")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="ServiceModel", ConfigurationName="ProductService.ProductsService")]
     public interface ProductsService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/Create", ReplyAction="BAS.ServiceModel/BaseService/CreateResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/Create", ReplyAction="ServiceModel/BaseService/CreateResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.List<int>))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.ValueTuple<bool, string>))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BAS.DataModelLibrary.Product))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.List<BAS.DataModelLibrary.Product>))]
-        System.ValueTuple<bool, object> Create(BAS.DataModelLibrary.Product parameter);
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataModelLibrary.Product))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.List<DataModelLibrary.Product>))]
+        System.ValueTuple<bool, object> Create(DataModelLibrary.Product parameter);
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/Create", ReplyAction="BAS.ServiceModel/BaseService/CreateResponse")]
-        System.Threading.Tasks.Task<System.ValueTuple<bool, object>> CreateAsync(BAS.DataModelLibrary.Product parameter);
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/Create", ReplyAction="ServiceModel/BaseService/CreateResponse")]
+        System.Threading.Tasks.Task<System.ValueTuple<bool, object>> CreateAsync(DataModelLibrary.Product parameter);
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/Update", ReplyAction="BAS.ServiceModel/BaseService/UpdateResponse")]
-        System.ValueTuple<bool, string> Update(System.Collections.Generic.List<BAS.DataModelLibrary.Product> parameters);
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/Update", ReplyAction="ServiceModel/BaseService/UpdateResponse")]
+        System.ValueTuple<bool, string> Update(System.Collections.Generic.List<DataModelLibrary.Product> parameters);
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/Update", ReplyAction="BAS.ServiceModel/BaseService/UpdateResponse")]
-        System.Threading.Tasks.Task<System.ValueTuple<bool, string>> UpdateAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Product> parameters);
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/Update", ReplyAction="ServiceModel/BaseService/UpdateResponse")]
+        System.Threading.Tasks.Task<System.ValueTuple<bool, string>> UpdateAsync(System.Collections.Generic.List<DataModelLibrary.Product> parameters);
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/Delete", ReplyAction="BAS.ServiceModel/BaseService/DeleteResponse")]
-        System.ValueTuple<bool, string> Delete(System.Collections.Generic.List<BAS.DataModelLibrary.Product> parameters);
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/Delete", ReplyAction="ServiceModel/BaseService/DeleteResponse")]
+        System.ValueTuple<bool, string> Delete(System.Collections.Generic.List<DataModelLibrary.Product> parameters);
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/Delete", ReplyAction="BAS.ServiceModel/BaseService/DeleteResponse")]
-        System.Threading.Tasks.Task<System.ValueTuple<bool, string>> DeleteAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Product> parameters);
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/Delete", ReplyAction="ServiceModel/BaseService/DeleteResponse")]
+        System.Threading.Tasks.Task<System.ValueTuple<bool, string>> DeleteAsync(System.Collections.Generic.List<DataModelLibrary.Product> parameters);
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/GetAll", ReplyAction="BAS.ServiceModel/BaseService/GetAllResponse")]
-        System.Collections.Generic.List<BAS.DataModelLibrary.Product> GetAll();
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/GetAll", ReplyAction="ServiceModel/BaseService/GetAllResponse")]
+        System.Collections.Generic.List<DataModelLibrary.Product> GetAll();
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/GetAll", ReplyAction="BAS.ServiceModel/BaseService/GetAllResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.List<BAS.DataModelLibrary.Product>> GetAllAsync();
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/GetAll", ReplyAction="ServiceModel/BaseService/GetAllResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<DataModelLibrary.Product>> GetAllAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/GetBy", ReplyAction="BAS.ServiceModel/BaseService/GetByResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/GetFromTo", ReplyAction="ServiceModel/BaseService/GetFromToResponse")]
+        System.Collections.Generic.List<DataModelLibrary.Product> GetFromTo(uint from, uint to);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/GetFromTo", ReplyAction="ServiceModel/BaseService/GetFromToResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<DataModelLibrary.Product>> GetFromToAsync(uint from, uint to);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/GetBy", ReplyAction="ServiceModel/BaseService/GetByResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.List<int>))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.ValueTuple<bool, object>))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.ValueTuple<bool, string>))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(BAS.DataModelLibrary.Product))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.List<BAS.DataModelLibrary.Product>))]
-        System.Collections.Generic.List<BAS.DataModelLibrary.Product> GetBy(string fieldName, object parameter);
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(DataModelLibrary.Product))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Collections.Generic.List<DataModelLibrary.Product>))]
+        System.Collections.Generic.List<DataModelLibrary.Product> GetBy(string fieldName, object value);
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/BaseService/GetBy", ReplyAction="BAS.ServiceModel/BaseService/GetByResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.List<BAS.DataModelLibrary.Product>> GetByAsync(string fieldName, object parameter);
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/BaseService/GetBy", ReplyAction="ServiceModel/BaseService/GetByResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<DataModelLibrary.Product>> GetByAsync(string fieldName, object value);
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/ProductsService/GetByPrice", ReplyAction="BAS.ServiceModel/ProductsService/GetByPriceResponse")]
-        System.Collections.Generic.List<BAS.DataModelLibrary.Product> GetByPrice(int minprice, System.Nullable<int> maxprice);
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/ProductsService/GetByPrice", ReplyAction="ServiceModel/ProductsService/GetByPriceResponse")]
+        System.Collections.Generic.List<DataModelLibrary.Product> GetByPrice(int minprice, System.Nullable<int> maxprice);
         
-        [System.ServiceModel.OperationContractAttribute(Action="BAS.ServiceModel/ProductsService/GetByPrice", ReplyAction="BAS.ServiceModel/ProductsService/GetByPriceResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.List<BAS.DataModelLibrary.Product>> GetByPriceAsync(int minprice, System.Nullable<int> maxprice);
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/ProductsService/GetByPrice", ReplyAction="ServiceModel/ProductsService/GetByPriceResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<DataModelLibrary.Product>> GetByPriceAsync(int minprice, System.Nullable<int> maxprice);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/ProductsService/GetById", ReplyAction="ServiceModel/ProductsService/GetByIdResponse")]
+        System.Collections.Generic.List<DataModelLibrary.Product> GetById(System.Collections.Generic.List<int> ids);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="ServiceModel/ProductsService/GetById", ReplyAction="ServiceModel/ProductsService/GetByIdResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<DataModelLibrary.Product>> GetByIdAsync(System.Collections.Generic.List<int> ids);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -86,52 +100,68 @@ namespace TestService.ProductService {
                 base(binding, remoteAddress) {
         }
         
-        public System.ValueTuple<bool, object> Create(BAS.DataModelLibrary.Product parameter) {
+        public System.ValueTuple<bool, object> Create(DataModelLibrary.Product parameter) {
             return base.Channel.Create(parameter);
         }
         
-        public System.Threading.Tasks.Task<System.ValueTuple<bool, object>> CreateAsync(BAS.DataModelLibrary.Product parameter) {
+        public System.Threading.Tasks.Task<System.ValueTuple<bool, object>> CreateAsync(DataModelLibrary.Product parameter) {
             return base.Channel.CreateAsync(parameter);
         }
         
-        public System.ValueTuple<bool, string> Update(System.Collections.Generic.List<BAS.DataModelLibrary.Product> parameters) {
+        public System.ValueTuple<bool, string> Update(System.Collections.Generic.List<DataModelLibrary.Product> parameters) {
             return base.Channel.Update(parameters);
         }
         
-        public System.Threading.Tasks.Task<System.ValueTuple<bool, string>> UpdateAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Product> parameters) {
+        public System.Threading.Tasks.Task<System.ValueTuple<bool, string>> UpdateAsync(System.Collections.Generic.List<DataModelLibrary.Product> parameters) {
             return base.Channel.UpdateAsync(parameters);
         }
         
-        public System.ValueTuple<bool, string> Delete(System.Collections.Generic.List<BAS.DataModelLibrary.Product> parameters) {
+        public System.ValueTuple<bool, string> Delete(System.Collections.Generic.List<DataModelLibrary.Product> parameters) {
             return base.Channel.Delete(parameters);
         }
         
-        public System.Threading.Tasks.Task<System.ValueTuple<bool, string>> DeleteAsync(System.Collections.Generic.List<BAS.DataModelLibrary.Product> parameters) {
+        public System.Threading.Tasks.Task<System.ValueTuple<bool, string>> DeleteAsync(System.Collections.Generic.List<DataModelLibrary.Product> parameters) {
             return base.Channel.DeleteAsync(parameters);
         }
         
-        public System.Collections.Generic.List<BAS.DataModelLibrary.Product> GetAll() {
+        public System.Collections.Generic.List<DataModelLibrary.Product> GetAll() {
             return base.Channel.GetAll();
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.List<BAS.DataModelLibrary.Product>> GetAllAsync() {
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<DataModelLibrary.Product>> GetAllAsync() {
             return base.Channel.GetAllAsync();
         }
         
-        public System.Collections.Generic.List<BAS.DataModelLibrary.Product> GetBy(string fieldName, object parameter) {
-            return base.Channel.GetBy(fieldName, parameter);
+        public System.Collections.Generic.List<DataModelLibrary.Product> GetFromTo(uint from, uint to) {
+            return base.Channel.GetFromTo(from, to);
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.List<BAS.DataModelLibrary.Product>> GetByAsync(string fieldName, object parameter) {
-            return base.Channel.GetByAsync(fieldName, parameter);
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<DataModelLibrary.Product>> GetFromToAsync(uint from, uint to) {
+            return base.Channel.GetFromToAsync(from, to);
         }
         
-        public System.Collections.Generic.List<BAS.DataModelLibrary.Product> GetByPrice(int minprice, System.Nullable<int> maxprice) {
+        public System.Collections.Generic.List<DataModelLibrary.Product> GetBy(string fieldName, object value) {
+            return base.Channel.GetBy(fieldName, value);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<DataModelLibrary.Product>> GetByAsync(string fieldName, object value) {
+            return base.Channel.GetByAsync(fieldName, value);
+        }
+        
+        public System.Collections.Generic.List<DataModelLibrary.Product> GetByPrice(int minprice, System.Nullable<int> maxprice) {
             return base.Channel.GetByPrice(minprice, maxprice);
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.List<BAS.DataModelLibrary.Product>> GetByPriceAsync(int minprice, System.Nullable<int> maxprice) {
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<DataModelLibrary.Product>> GetByPriceAsync(int minprice, System.Nullable<int> maxprice) {
             return base.Channel.GetByPriceAsync(minprice, maxprice);
+        }
+        
+        public System.Collections.Generic.List<DataModelLibrary.Product> GetById(System.Collections.Generic.List<int> ids) {
+            return base.Channel.GetById(ids);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<DataModelLibrary.Product>> GetByIdAsync(System.Collections.Generic.List<int> ids) {
+            return base.Channel.GetByIdAsync(ids);
         }
     }
 }

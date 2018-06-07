@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BAS.DataModelLibrary;
+using DataModelLibrary;
 using System.ServiceModel;
-namespace BAS
+
+namespace ServiceContractLibrary
 {
-    namespace ServiceContractLibrary
+    [ServiceContract(Namespace = "ServiceModel", Name = "OrdersService")]
+    public interface IOrdersServiceContract : IBaseServiceContract<Order>
     {
-        [ServiceContract(Namespace = "BAS.ServiceModel", Name = "OrdersService")]
-        public interface IOrdersServiceContract : IBaseServiceContract<Order>
-        {
-            ICollection<OrderStatus> GetOrderStatuses(int orderId);
-        }
+        ICollection<OrderStatus> GetOrderStatuses(int orderId);
     }
 }

@@ -3,23 +3,20 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace BAS
+namespace DataModelLibrary
 {
-    namespace DataModelLibrary
+    [DataContract]
+    public class OrderStatus
     {
-        [DataContract]
-        public class OrderStatus
+        [DataMember] public string Status { get; set; }
+        [DataMember] public DateTime DateChange { get; set; }
+
+        public OrderStatus(string status, DateTime date)
         {
-            [DataMember] public Status Status { get; set; }
-            [DataMember] public DateTime DateChange { get; set; }
-
-            public OrderStatus(Status status, DateTime date)
-            {
-                this.Status = status;
-                this.DateChange = date;
-            }
-
-            public OrderStatus() { }
+            this.Status = status;
+            this.DateChange = date;
         }
+
+        public OrderStatus() { }
     }
 }

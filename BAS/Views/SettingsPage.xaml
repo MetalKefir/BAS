@@ -1,0 +1,128 @@
+﻿<Page
+    x:Class="BAS.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BAS.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:controls="using:Template10.Controls"
+    xmlns:vm="using:BAS.ViewModels"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.DataContext>
+        <vm:SettingsPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
+    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                <VisualState x:Name="VisualStateNarrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for narrow view  -->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateNormal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for normal view  -->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateWide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for wide view  -->
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <controls:PageHeader x:Name="pageHeader"
+                             x:Uid="/SettingResources/Title"
+                             Frame="{x:Bind Frame}"
+                             RelativePanel.AlignLeftWithPanel="True"
+                             RelativePanel.AlignRightWithPanel="True"
+                             RelativePanel.AlignTopWithPanel="True" />
+
+        <Pivot x:Name="SettingPivot"
+               Grid.Row="1"
+               RelativePanel.AlignBottomWithPanel="True"
+               RelativePanel.AlignLeftWithPanel="True"
+               RelativePanel.AlignRightWithPanel="True"
+               RelativePanel.Below="pageHeader">
+
+            <PivotItem x:Uid="/SettingResources/GeneralSettings">
+                <ScrollViewer Margin="0,12,-12,0"
+                              HorizontalContentAlignment="Left"
+                              VerticalScrollBarVisibility="Auto">
+                    <RelativePanel HorizontalAlignment="Left">
+
+                        <TextBox x:Name="CountUploadElemets"
+                                 Margin="0,12,0,0"
+                                 HorizontalAlignment="Left"
+                                 x:Uid="/SettingResources/UploadElemetsTextBox"
+                                 RelativePanel.AlignLeftWithPanel="True"
+                                 RelativePanel.AlignTopWithPanel="True"
+                                 Text="{Binding CountUploadElemets, Mode=TwoWay, UpdateSourceTrigger = PropertyChanged}" />
+
+                        <Button Margin="12,0,0,0"
+                                Command="{Binding SaveSettingUpload}"
+                                x:Uid="/SettingResources/SaveButton"
+                                RelativePanel.AlignBottomWith="CountUploadElemets"
+                                RelativePanel.RightOf="CountUploadElemets" />
+
+                    </RelativePanel>
+
+                </ScrollViewer>
+            </PivotItem>
+
+            <PivotItem x:Uid="/SettingResources/ProductSettings">
+                <ScrollViewer Margin="0,12,-12,0"
+                              HorizontalContentAlignment="Left"
+                              VerticalScrollBarVisibility="Auto">
+                    <RelativePanel HorizontalAlignment="Left">
+
+                        <TextBox x:Name="ValueMinCountProduct"
+                                 Margin="0,12,0,0"
+                                 HorizontalAlignment="Left"
+                                 x:Uid="/SettingResources/MinCountProducts"
+                                 RelativePanel.AlignLeftWithPanel="True"
+                                 RelativePanel.AlignTopWithPanel="True"
+                                 Text="{Binding MinCountProducts, Mode=TwoWay, UpdateSourceTrigger = PropertyChanged}" />
+
+                        <Button Margin="12,0,0,0"
+                                Command="{Binding SaveSetting}"
+                                x:Uid="/SettingResources/SaveButton"
+                                RelativePanel.AlignBottomWith="ValueMinCountProduct"
+                                RelativePanel.RightOf="ValueMinCountProduct" />
+
+                        <TextBox x:Name="WarningThreshold"
+                                 Margin="0,12,0,0"
+                                 HorizontalAlignment="Left"
+                                 x:Uid="/SettingResources/WarningThreshold"
+                                 RelativePanel.AlignLeftWithPanel="True"
+                                 RelativePanel.Below="ValueMinCountProduct"
+                                 Text="{Binding WarningThreshold, Mode=TwoWay, UpdateSourceTrigger = PropertyChanged}" />
+
+                        <Button Margin="12,0,0,0"
+                                Command="{Binding SaveSettingwarning}"
+                                x:Uid="/SettingResources/SaveButton"
+                                RelativePanel.AlignBottomWith="WarningThreshold"
+                                RelativePanel.RightOf="WarningThreshold" />
+
+                    </RelativePanel>
+
+                </ScrollViewer>
+            </PivotItem>
+            
+        </Pivot>
+    </RelativePanel>
+</Page>

@@ -3,23 +3,20 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace BAS
+namespace DataModelLibrary
 {
-    namespace DataModelLibrary
+    [DataContract]
+    public class OrderedProduct
     {
-        [DataContract]
-        public class OrderedProduct
+        [DataMember] public Product Product { get; set; }
+        [DataMember] public int Quantity { get; set; }
+
+        public OrderedProduct(Product product, int quantity)
         {
-            [DataMember] public Product Product { get; set; }
-            [DataMember] public int Quantity { get; set; }
-
-            public OrderedProduct(Product product, int quantity)
-            {
-                this.Product = product;
-                this.Quantity = quantity;
-            }
-
-            public OrderedProduct() { }
+            this.Product = product;
+            this.Quantity = quantity;
         }
+
+        public OrderedProduct() { }
     }
 }

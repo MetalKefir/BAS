@@ -4,17 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
-using BAS.DataModelLibrary;
+using DataModelLibrary;
 
-namespace BAS
+namespace ServiceContractLibrary
 {
-    namespace ServiceContractLibrary
+    [ServiceContract(Namespace = "ServiceModel", Name = "ProductsService")]
+    public interface IProductsServiceContract : IBaseServiceContract<Product>
     {
-        [ServiceContract(Namespace = "BAS.ServiceModel", Name = "ProductsService")]
-        public interface IProductsServiceContract : IBaseServiceContract<Product>
-        {
-            [OperationContract(Name = "GetByPrice")]
-            ICollection<Product> GetByPrice(int minprice, int? maxprice = null);
-        }
+        [OperationContract(Name = "GetByPrice")]
+        ICollection<Product> GetByPrice(int minprice, int? maxprice = null);
+
+        [OperationContract(Name = "GetById")]
+        ICollection<Product> GetById(ICollection<int> ids);
+
+        [OperationContract(Name = "GetAllTypes")]
+        ICollection<string> GetAllType();
+
+        [OperationContract(Name = "GetAllManufacturers")]
+        ICollection<string> GetAllManufacturer();
+
+        [OperationContract(Name = "GetAllColors")]
+        ICollection<string> GetAllColor();
     }
 }

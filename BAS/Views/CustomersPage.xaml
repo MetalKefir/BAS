@@ -1,0 +1,81 @@
+﻿<Page
+    x:Class="BAS.Views.CustomersPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BAS.Views"
+    xmlns:syncfusion="using:Syncfusion.UI.Xaml.Grid"
+    xmlns:controls="using:Template10.Controls"
+    xmlns:vm="using:BAS.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.DataContext>
+        <vm:CustomersPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <ContentDialog x:Name="DeleteElementsSelectErr">
+            <ContentControl.Content>
+                <StackPanel Margin="0,10,0,10">
+                    <TextBlock Text="Elements not selected" TextAlignment="Center" Margin="0,10,0,0" />
+                </StackPanel>
+            </ContentControl.Content>
+        </ContentDialog>
+
+        <controls:PageHeader x:Name="pageHeader"
+                             Frame="{x:Bind Frame}"
+                             x:Uid="/CustomerResources/Title"
+                             Grid.Row="0">
+            <controls:PageHeader.PrimaryCommands>
+                <AppBarButton x:Name="UploadButton" Foreground="White" Icon="Refresh" x:Uid="/ButonResources/Upload" Command="{Binding LoadItems}"/>
+
+                <AppBarButton x:Name="DeleteButton" Foreground="White" Icon="Delete" x:Uid="/ButonResources/Delete" Command="{Binding DeleteItems}" 
+                              CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"/>
+
+                <AppBarButton x:Name="EditButton" Foreground="White" Icon="Edit" x:Uid="/ButonResources/Edit" Command="{Binding EditItem}" 
+                              CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"/>
+
+                <AppBarButton x:Name="AddButton" Foreground="White" Icon="Add" x:Uid="/ButonResources/Add" Command="{Binding AddItem}"/>
+            </controls:PageHeader.PrimaryCommands>
+        </controls:PageHeader>
+
+        <syncfusion:SfDataGrid 
+                            x:Name="dataGrid"
+                            AutoGenerateColumns="False"
+                            AllowResizingColumns="True"
+                            AllowResizingHiddenColumns="True"
+                            AllowDraggingColumns="True"
+                            AllowFiltering="True"
+                            ShowRowHeader="True"
+                            AllowGrouping="True"
+                            ShowGroupDropArea="True"
+                            ItemsSource="{Binding Customers}"
+                            x:Uid="/CustomerResources/GroupingFormat"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            SelectionMode="Extended"
+                            SelectionUnit="Row"
+                            Grid.Row="1">
+            
+            <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridNumericColumn MappingName="Id" x:Uid="/CustomerResources/CustomerID" TextWrapping="Wrap" AllowEditing="False" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn MappingName="FName" x:Uid="/CustomerResources/FName" TextWrapping="Wrap"/>
+                <syncfusion:GridTextColumn MappingName="LName" x:Uid="/CustomerResources/LName" TextWrapping="Wrap"/>
+                <syncfusion:GridTextColumn MappingName="MName" x:Uid="/CustomerResources/MName" TextWrapping="Wrap"/>
+                <syncfusion:GridTextColumn MappingName="Age" x:Uid="/CustomerResources/Age" TextWrapping="Wrap"/>
+                <syncfusion:GridTextColumn MappingName="PhoneNumber" x:Uid="/CustomerResources/PhoneNumber" TextWrapping="Wrap" ColumnSizer="Star"/>
+                <syncfusion:GridTextColumn MappingName="Email" x:Uid="/CustomerResources/Email" TextWrapping="Wrap" ColumnSizer="Star"/>
+                <syncfusion:GridTextColumn MappingName="CustomerAddress" x:Uid="/CustomerResources/Address" TextWrapping="Wrap" ColumnSizer="AutoWithLastColumnFill"/>
+            </syncfusion:SfDataGrid.Columns>
+
+        </syncfusion:SfDataGrid>
+        
+    </Grid>
+</Page>

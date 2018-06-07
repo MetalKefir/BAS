@@ -1,0 +1,92 @@
+﻿<Page
+    x:Class="BAS.Views.ProductsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BAS.Views"
+    xmlns:syncfusion="using:Syncfusion.UI.Xaml.Grid"
+    xmlns:controls="using:Template10.Controls"
+    xmlns:vm="using:BAS.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utils="using:Syncfusion.UI.Xaml.Utils"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.DataContext>
+        <vm:ProductsPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
+    <Page.Resources>
+        <vm:ColorConverter x:Key="converter"/>
+        <Style TargetType="syncfusion:VirtualizingCellsControl">
+            <Setter Property="utils:SetterValueBindingHelper.PropertyBinding">
+                <Setter.Value>
+                    <utils:SetterValueBindingHelper Property="Background" Binding="{Binding Converter={StaticResource converter}}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <ContentDialog x:Name="DeleteElementsSelectErr">
+            <ContentControl.Content>
+                <StackPanel Margin="0,10,0,10">
+                    <TextBlock Text="Elements not selected" TextAlignment="Center" Margin="0,10,0,0" />
+                </StackPanel>
+            </ContentControl.Content>
+        </ContentDialog>
+
+        <controls:PageHeader x:Name="pageHeader"
+                             Frame="{x:Bind Frame}"
+                             x:Uid="/ProductResources/Title"
+                             Grid.Row="0">
+            <controls:PageHeader.PrimaryCommands>
+                <AppBarButton x:Name="UploadButton" Foreground="White" Icon="Refresh" x:Uid="/ButonResources/Upload" Command="{Binding LoadItems}"/>
+
+                <AppBarButton x:Name="DeleteButton" Foreground="White" Icon="Delete" x:Uid="/ButonResources/Delete" Command="{Binding DeleteItems}" 
+                              CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"/>
+
+                <AppBarButton x:Name="EditButton" Foreground="White" Icon="Edit" x:Uid="/ButonResources/Edit" Command="{Binding EditItem}" 
+                              CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"/>
+
+                <AppBarButton x:Name="AddButton" Foreground="White" Icon="Add" x:Uid="/ButonResources/Add" Command="{Binding AddItem}"/>
+            </controls:PageHeader.PrimaryCommands>
+        </controls:PageHeader>
+
+        <syncfusion:SfDataGrid 
+                            x:Name="dataGrid"
+                            AutoGenerateColumns="False"
+                            AllowResizingColumns="True"
+                            AllowResizingHiddenColumns="True"
+                            AllowDraggingColumns="True"
+                            AllowFiltering="True"
+                            AllowGrouping="True"
+                            ShowGroupDropArea="True"
+                            ItemsSource="{Binding Products}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            SelectionMode="Extended"
+                            SelectionUnit="Row"
+                            x:Uid="/ProductResources/GroupingFormat"
+                            ShowRowHeader="True"
+                            Grid.Row="1">
+            <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridNumericColumn MappingName="Articulus" x:Uid="/ProductResources/Articulus" TextWrapping="Wrap" AllowEditing="False" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn MappingName="Name" x:Uid="/ProductResources/ProductName" TextWrapping="Wrap"/>
+                <syncfusion:GridTextColumn MappingName="Manufacturer" x:Uid="/ProductResources/Manufacturer"/>
+                <syncfusion:GridTextColumn MappingName="Type" x:Uid="/ProductResources/Type"/>
+                <syncfusion:GridTextColumn MappingName="Color" x:Uid="/ProductResources/Color"/>
+                <syncfusion:GridNumericColumn MappingName="Quantity" x:Uid="/ProductResources/Quantity" TextWrapping="Wrap"/>
+                <syncfusion:GridNumericColumn MappingName="Price" x:Uid="/ProductResources/Price" TextWrapping="Wrap"/>
+                <syncfusion:GridNumericColumn MappingName="Sale" x:Uid="/ProductResources/Sale" TextWrapping="Wrap"/>
+                <syncfusion:GridTextColumn MappingName="Description" x:Uid="/ProductResources/Description" TextWrapping="Wrap" ColumnSizer="AutoWithLastColumnFill"/>
+            </syncfusion:SfDataGrid.Columns>
+        </syncfusion:SfDataGrid>
+        
+    </Grid>
+</Page>
